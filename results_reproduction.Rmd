@@ -1,0 +1,20 @@
+---
+title: "results reproduction"
+output: html_document
+---
+```{r, eval = FALSE}
+library(tidyverse)
+library(yardstick)
+library(ggplot2)
+library(mosaic)
+```
+
+```{r}
+library(haven)
+AttanasioEtAl2011Dyadic <- read_dta("Data/AttanasioEtAl2011Dyadic.dta")
+```
+
+```{r}
+glimpse(AttanasioEtAl2011Dyadic)
+```
+
