@@ -10,30 +10,56 @@ library(mosaic)
 library(stargazer)
 require(Stat2Data)
 library(scales)
+library(readr)
 ```
 
 ```{r}
 library(haven)
-Dyadic <- read_dta("Data/AttanasioEtAl2011Dyadic.dta")
+Dyadic_dta<- read_dta("Data/AttanasioEtAl2011Dyadic.dta")
+Dyadic<-read.csv("Dyadic.csv")
 ```
 
 ```{r}
 glimpse(Dyadic)
 ```
+```{r}
+str(Dyadic)
+```
 
+Mutate var stranger which does no exist in the original dataframe 
 ```{r}
 tally(~Dyadic$municode)
-na.omit(Dyadic)
+tally(~Dyadic$samegroup)
+#Dyadic<-na.omit(Dyadic) 
+Dyadic<-Dyadic%>%
+  mutate(stranger = 1 - as.numeric(Dyadic$frfam))
 Dyadic$municode<-as.numeric(Dyadic$municode)
+Dyadic$stranger
 ```
 
 ```{r}
 Dyadic <- Dyadic %>%
   mutate(mdum = ifelse(municode < 71 | municode > 0, 1, 0))
 tally(~Dyadic$mdum)
+
+
+pervar<-c("samegroup","friend2","friendfamily","stranger", "frfam","family2", "friend1", "family1", "frfamcl", "difurban", "diffemale","difmarried")
+for (i in pervar) {
+Dyadic[[i]] <- (as.numeric(Dyadic[[i]]))*100
+}
+
 ```
 
-```{r}
-stargazer(fixed0,fixed,fixed2,fixed3,fixed4,type = "html", column.labels = c("pumaFixed","pumaRandom","stateFixed","puma","state"), column.separate = NULL,dep.var.labels= "Log(%NativeEduc)",title="Regression Results", covariate.labels=c("Log(%ImmigranNEduct)","Log(%ImmigrantEduc)","Log(%ImmiEng)","Log(AvgWageN)","Log(EmployRateN)","Log(%ImmigrantEduc)*Log(EmployRateN)","Log(%ImmigranNEduct)*Log(EmployRateN)"),align=TRUE, out="models.htm",omit.stat=c("LL","ser","f"),ci=FALSE, ci.level=0.90,no.space=TRUE)
+https://www.princeton.edu/~otorres/NiceOutputR.pdf
+
+The variable difmar's name should be 'difmarried' and nummar should be nummarried.
+
+```{r, message = FALSE}
+stargazer(subset(Dyadic[c("samegroup","difchoice1","sumchoice1","frfam","friend2","friendfamily", "family2", "friend1", "family1","stranger","frfamcl", "difurban", "diffemale", "difyage", "difysch", "difmarried","diftcons","difcons", "difhhsize","difwin1","sumurban","sumfemale","sumyage", "sumysch", "nummarried", "sumtcons", "sumcons", "sumhhsize", "sumwin1")],Dyadic$inreg ==1), type = "html", title="Descriptive statistics", digits=4, out="table4.html", covariate.labels = c("Joined same group in round 2(%)", "Difference in gamble choice(round1)","Sum of gamble choices (round 1)", "Friends and family: One or both recognized friendship or kinship(%)","Both recognized friendship(%)","Both recognized kinship(%)","One recognized friendship, other kinship(%)","One recognized friendship(%)", "One recognized kinship(%)", "Stranger(%)","Geographically proximate friends and family(%)","One lives in the municipal centre, one not(%)","Different genders(%)","Difference in age(years)","Difference in education (years)","Difference in marital status(%)","Difference in household consumption ('000s Pesos/month)","Difference in log household consumption per month","Difference in household size","Difference in round 1 winnings ('000 Pesos)","Number who live in the municipal centre","Number of females","Sum of ages (years)","Sum of education (years)","Number married","Sum of household consumption ('000s Pesos/month)","Sum of log household consumption per month","Sum of household sizes","Sum of round 1 winnings ('000s Pesos)"), summary.stat = c("mean", "sd"))
+
+```
+
+# ```{r}
+# stargazer(fixed0,fixed,fixed2,fixed3,fixed4,type = "html", column.labels = c("pumaFixed","pumaRandom","stateFixed","puma","state"), column.separate = NULL,dep.var.labels= "Log(%NativeEduc)",title="Regression Results", covariate.labels=c("Log(%ImmigranNEduct)","Log(%ImmigrantEduc)","Log(%ImmiEng)","Log(AvgWageN)","Log(EmployRateN)","Log(%ImmigrantEduc)*Log(EmployRateN)","Log(%ImmigranNEduct)*Log(EmployRateN)"),align=TRUE, out="models.htm",omit.stat=c("LL","ser","f"),ci=FALSE, ci.level=0.90,no.space=TRUE)
 ```
 
