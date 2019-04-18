@@ -1,6 +1,7 @@
 ---
 title: "results reproduction"
 output: html_document
+author: "Jocelyn Hu"
 ---
 ```{r, eval = FALSE}
 library(tidyverse)
