@@ -7,14 +7,33 @@ library(tidyverse)
 library(yardstick)
 library(ggplot2)
 library(mosaic)
+library(stargazer)
+require(Stat2Data)
+library(scales)
 ```
 
 ```{r}
 library(haven)
-AttanasioEtAl2011Dyadic <- read_dta("Data/AttanasioEtAl2011Dyadic.dta")
+Dyadic <- read_dta("Data/AttanasioEtAl2011Dyadic.dta")
 ```
 
 ```{r}
-glimpse(AttanasioEtAl2011Dyadic)
+glimpse(Dyadic)
+```
+
+```{r}
+tally(~Dyadic$municode)
+na.omit(Dyadic)
+Dyadic$municode<-as.numeric(Dyadic$municode)
+```
+
+```{r}
+Dyadic <- Dyadic %>%
+  mutate(mdum = ifelse(municode < 71 | municode > 0, 1, 0))
+tally(~Dyadic$mdum)
+```
+
+```{r}
+stargazer(fixed0,fixed,fixed2,fixed3,fixed4,type = "html", column.labels = c("pumaFixed","pumaRandom","stateFixed","puma","state"), column.separate = NULL,dep.var.labels= "Log(%NativeEduc)",title="Regression Results", covariate.labels=c("Log(%ImmigranNEduct)","Log(%ImmigrantEduc)","Log(%ImmiEng)","Log(AvgWageN)","Log(EmployRateN)","Log(%ImmigrantEduc)*Log(EmployRateN)","Log(%ImmigranNEduct)*Log(EmployRateN)"),align=TRUE, out="models.htm",omit.stat=c("LL","ser","f"),ci=FALSE, ci.level=0.90,no.space=TRUE)
 ```
 
