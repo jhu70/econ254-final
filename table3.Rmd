@@ -1,0 +1,274 @@
+---
+title: "results reproduction"
+output: html_document
+author: "Jocelyn Hu"
+---
+```{r}
+library(tidyverse)
+library(yardstick)
+library(ggplot2)
+library(mosaic)
+library(stargazer)
+require(Stat2Data)
+library(scales)
+library(readr)
+library(rms)
+library(pastecs)
+library(tidyr)
+```
+
+```{r}
+library(haven)
+Dyadic_dta<- read_dta("Data/AttanasioEtAl2011Vector.dta")
+vector<-read.csv("vector.csv") %>%
+  mutate(renegadelose = renegade - renegadewin)
+```
+
+```{r}
+tally(~vector$choice1)
+```
+
+
+```{r table 3 stata}
+c1<-as.data.frame(table(vector$choice1))%>%
+  mutate(Prop = Freq/sum(Freq))%>%
+  spread(Var1, Prop)
+colnames(c1) <- paste("gamble",colnames(c1), sep = "_")
+
+c1<-c1%>%
+  select(gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
+
+
+c1$gamble_1[is.na(c1$gamble_1)] <- c1$gamble_1[!is.na(c1$gamble_1)]
+
+c1$gamble_2[is.na(c1$gamble_2)] <- c1$gamble_2[!is.na(c1$gamble_2)]
+
+c1$gamble_3[is.na(c1$gamble_3)] <- c1$gamble_3[!is.na(c1$gamble_3)]
+
+c1$gamble_4[is.na(c1$gamble_4)] <- c1$gamble_4[!is.na(c1$gamble_4)]
+
+
+c1$gamble_5[is.na(c1$gamble_5)] <- c1$gamble_5[!is.na(c1$gamble_5)]
+
+c1$gamble_6[is.na(c1$gamble_6)] <- c1$gamble_6[!is.na(c1$gamble_6)]
+
+c1<-c1*100
+c1<-data.frame(choice = "choice1", c1)%>%
+  gather(key = "gamble", "prop", gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
+```
+
+```{r}
+
+c2<-as.data.frame(table(vector$choice2))%>%
+  mutate(Prop = Freq/sum(Freq))%>%
+  spread(Var1, Prop)
+colnames(c2) <- paste("gamble",colnames(c2), sep = "_")
+
+c2<-c2%>%
+  select(gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
+
+c2$gamble_1[is.na(c2$gamble_1)] <- c2$gamble_1[!is.na(c2$gamble_1)]
+
+c2$gamble_2[is.na(c2$gamble_2)] <- c2$gamble_2[!is.na(c2$gamble_2)]
+
+c2$gamble_3[is.na(c2$gamble_3)] <- c2$gamble_3[!is.na(c2$gamble_3)]
+
+c2$gamble_4[is.na(c2$gamble_4)] <- c2$gamble_4[!is.na(c2$gamble_4)]
+
+
+c2$gamble_5[is.na(c2$gamble_5)] <- c2$gamble_5[!is.na(c2$gamble_5)]
+
+c2$gamble_6[is.na(c2$gamble_6)] <- c2$gamble_6[!is.na(c2$gamble_6)]
+
+c2<-c2*100
+c2<-data.frame(choice = "choice2", c2)%>%
+  gather(key = "gamble", "prop", gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
+  
+c3<-merge(c1, c2, all = TRUE)%>%  
+  group_by(gamble,choice)%>%
+  summarise(meanprop = mean(prop))%>%
+  spread(choice,meanprop)
+
+c3<-data.frame(round = "1", c3)
+
+  
+```
+
+
+
+```{r}
+vector2 <- vector[vector$insample==1, ]
+```
+
+```{r table 3 stata}
+c1b<-as.data.frame(table(vector2$choice1))%>%
+  mutate(Prop = Freq/sum(Freq))%>%
+  spread(Var1, Prop)
+colnames(c1b) <- paste("gamble",colnames(c1b), sep = "_")
+
+c1b<-c1b%>%
+  select(gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
+
+c1b$gamble_1[is.na(c1b$gamble_1)] <- c1b$gamble_1[!is.na(c1b$gamble_1)]
+
+c1b$gamble_2[is.na(c1b$gamble_2)] <- c1b$gamble_2[!is.na(c1b$gamble_2)]
+
+c1b$gamble_3[is.na(c1b$gamble_3)] <- c1b$gamble_3[!is.na(c1b$gamble_3)]
+
+c1b$gamble_4[is.na(c1b$gamble_4)] <- c1b$gamble_4[!is.na(c1b$gamble_4)]
+
+
+c1b$gamble_5[is.na(c1b$gamble_5)] <- c1b$gamble_5[!is.na(c1b$gamble_5)]
+
+c1b$gamble_6[is.na(c1b$gamble_6)] <- c1b$gamble_6[!is.na(c1b$gamble_6)]
+
+c1b<-c1b*100
+c1b<-data.frame(choice = "choice1", c1b)%>%
+  gather(key = "gamble", "prop", gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
+```
+
+```{r}
+
+c2b<-as.data.frame(table(vector2$choice2))%>%
+  mutate(Prop = Freq/sum(Freq))%>%
+  spread(Var1, Prop)
+colnames(c2b) <- paste("gamble",colnames(c2b), sep = "_")
+
+c2b<-c2b%>%
+  select(gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
+
+c2b$gamble_1[is.na(c2b$gamble_1)] <- c2b$gamble_1[!is.na(c2b$gamble_1)]
+
+c2b$gamble_2[is.na(c2b$gamble_2)] <- c2b$gamble_2[!is.na(c2b$gamble_2)]
+
+c2b$gamble_3[is.na(c2b$gamble_3)] <- c2b$gamble_3[!is.na(c2b$gamble_3)]
+
+c2b$gamble_4[is.na(c2b$gamble_4)] <- c2b$gamble_4[!is.na(c2b$gamble_4)]
+
+
+c2b$gamble_5[is.na(c2b$gamble_5)] <- c2b$gamble_5[!is.na(c2b$gamble_5)]
+
+c2b$gamble_6[is.na(c2b$gamble_6)] <- c2b$gamble_6[!is.na(c2b$gamble_6)]
+
+
+c2b<-c2b*100
+c2b<-data.frame(choice = "choice2", c2b)%>%
+  gather(key = "gamble", "prop", gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
+  
+c3b<-merge(c1b, c2b, all = TRUE)%>%  
+  group_by(gamble,choice)%>%
+  summarise(meanprop = mean(prop))%>%
+  spread(choice,meanprop)
+
+c3b<-data.frame(round = "2", c3b)
+
+```
+
+```{r}
+gamblechoice<-merge(c3,c3b,all = TRUE)%>%
+  mutate(sd_fullsample = " ")%>%
+  mutate(sd_sampleanalysed = " ")
+
+colnames(gamblechoice)[colnames(gamblechoice)=="choice1"] <- "mean_fullsample"
+colnames(gamblechoice)[colnames(gamblechoice)=="choice2"] <- "mean_sampleanalysed"
+colnames(gamblechoice)[colnames(gamblechoice)=="gamble"] <- "Vars"
+
+
+```
+
+
+```{r}
+vectorsum1<-vector%>%
+  select(blue1,win1, group, cogrpmem, blue2, renegadelose, renegadewin, win2)%>%
+  gather(key = "Vars","Value",blue1,win1, group, cogrpmem, blue2, renegadewin, win2,renegadelose)
+
+vectorsum1<-na.omit(vectorsum1)%>%
+  group_by(Vars)%>%
+  summarise_each(funs(mean_fullsample = mean(Value), sd_fullsample = sd(Value)))%>%
+  mutate(round = c(1,2,1,1,2,2,1,2))
+
+
+```
+
+```{r}
+#need to fix decimal points
+vectorsum2<-vector%>%
+  filter(insample==1)%>%
+  select(blue1,win1, group, cogrpmem, blue2, renegadelose, renegadewin, win2)%>%
+  gather(key = "Vars","Value",blue1,win1, group, cogrpmem, blue2, renegadewin, win2,renegadelose)
+ 
+
+vectorsum2<-na.omit(vectorsum2)%>%
+  group_by(Vars)%>%
+  summarise_each(funs(mean_sampleanalysed = mean(Value), sd_sampleanalysed = sd(Value)))%>%
+  mutate(round = c(1,2,1,1,2,2,1,2))
+
+
+```
+
+```{r}
+others<- merge(vectorsum1, vectorsum2, all = TRUE)
+total<- merge(others, gamblechoice, all = TRUE)
+is.num <- sapply(total, is.numeric)
+total[is.num] <- lapply(total[is.num], round, 4)
+total<-arrange(total,round, Vars)
+total[1,4]<- " "
+total[9,4]<-" "
+total[11,4]<-" "
+total[18,4]<-" "
+total[19,4]<-" "
+total[1,6]<- " "
+total[9,6]<-" "
+total[11,6]<-" "
+total[18,6]<-" "
+total[19,6]<-" "
+total[1,2]<-" "
+total[2,2]<-" "
+total[9,2]<-" "
+total[10,2]<-" "
+total[11,2]<-" "
+total[18,2]<-" "
+total[19,2]<-" "
+total[20,2]<-" "
+print(total)
+```
+
+
+```{r}
+library(formattable)
+total[1,3] <- total[1,3]*100
+total[1,5] <- total[1,5]*100
+total[9,3] <- total[9,3]*100
+total[9,5] <- total[9,5]*100
+total[10,3] <- total[10,3]/1000
+total[20,3] <- total[20,3]/1000
+total[10,5] <- total[10,5]/1000
+total[20,5] <- total[20,5]/1000
+total[[4]] <- as.numeric(total[[4]])
+total[[6]] <- as.numeric(total[[6]])
+total[10,4] <- total[10,4]/1000
+total[20,4] <- total[20,4]/1000
+total[10,6] <- total[10,6]/1000
+total[20,6] <- total[20,6]/1000
+total[11,3] <- total[11,3]*100
+total[11,5] <- total[11,5]*100
+total[18,3] <- total[18,3]*100
+total[18,5] <- total[18,5]*100
+total[19,3] <- total[19,3]*100
+total[19,5] <- total[19,5]*100
+total[["Vars"]]<- c("Won gamble in 1st round","Number of co-group members","Gamble 1(safe)","Gamble 2","Gamble 3", "Gamble 4", "Gamble 5", "Gamble 6(riskiest)","Joined a group","Winings 1st round ('000 Pesos)","Won gamble in 2nd round", "Gamble 1", "Gamble 2", "Gamble 3", "Gamble 4", "Gamble 5", "Gamble 6","Reneged having lost gamble","Reneged having won gamble","Winnings 2nd round ('000 Pesos)")
+head(total)
+```
+
+```{r}
+total <- rbind(c("", "", "Full-","Sample","Sample-","Analysed"), total)
+colnames(total) =  c(" ","round","Mean/Prop","s.d.(a)","Mean/Prop","s.d.(a)")
+
+```
+
+
+```{r}
+stargazer(total, type = "html", out = "summary.html",summary.stat = c("mean"), summary = FALSE, title = "Table3: Experimental data")
+
+```
+```

@@ -1,0 +1,14 @@
+
+Descriptive statistics
+======================
+Statistic      Mean   
+----------------------
+blue1         0.5471  
+win1        5,841.5560
+group         0.8623  
+cogrpmem      4.1951  
+blue2         0.5772  
+renegade      0.0802  
+renegadewin   0.0626  
+win2        6,134.2910
+----------------------
