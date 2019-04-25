@@ -1,0 +1,170 @@
+---
+title: "Table5"
+author: "Jocelyn Hu"
+date: "April 25, 2019"
+output: html_document
+---
+```{r}
+library(tidyverse)
+library(yardstick)
+library(ggplot2)
+library(mosaic)
+library(stargazer)
+require(Stat2Data)
+library(scales)
+library(readr)
+library(rms)
+```
+
+```{r}
+library(haven)
+Dyadic_dta<- read_dta("Data/AttanasioEtAl2011Dyadic.dta")
+Dyadic<-read.csv("Dyadic.csv")
+Dyadic_mdum<-read.csv("Dyadic_mdum.csv")
+```
+
+```{r}
+glimpse(Dyadic_dta$inreg)
+```
+
+```{r}
+str(Dyadic)
+```
+
+Mutate var stranger which does no exist in the original dataframe 
+```{r}
+tally(~Dyadic$municode)
+tally(~Dyadic$samegroup)
+#Dyadic<-na.omit(Dyadic) 
+Dyadic<-Dyadic%>%
+  mutate(stranger = 1 - as.numeric(Dyadic$frfam))
+
+```
+
+```{r}
+
+for (x in 1:70){
+name <-paste("mdum",x,sep="")
+Dyadic[[name]] <- ifelse(Dyadic$municode == x, 1, 0)
+}
+```
+
+```{r}
+Dyadic<-Dyadic %>% mutate_each(funs(factor), starts_with("mdum"))
+
+```
+
+```{r}
+pervar<-c("samegroup","friend2","friendfamily","stranger", "frfam","family2", "friend1", "family1", "frfamcl", "difurban", "diffemale","difmarried")
+for (i in pervar) {
+Dyadic[[i]] <- (as.numeric(Dyadic[[i]]))*100
+}
+
+Dyadic[["sumtcons"]] <- (as.numeric(Dyadic[["sumtcons"]]))/1000
+
+Dyadic[["diftcons"]] <- (as.numeric(Dyadic[["diftcons"]]))/1000
+```
+
+```{r}
+pervar<-c("samegroup","friend2","friendfamily","stranger", "frfam","family2", "friend1", "family1", "difurban","frfamcl", "diffemale","difmarried")
+
+for (i in pervar) {
+Dyadic[[i]] <- (as.numeric(Dyadic[[i]]))/100
+}
+
+```
+
+```{r}
+#generate formula for column 1 of table 5
+mdum <- Dyadic[, grepl("mdum", names(Dyadic))]
+mdumf<-paste(names(mdum),collapse = '+')
+c1_formula <- as.formula(paste("samegroup ~ difchoice1+frfamcl+dcfrfamcl+factor(municode)+",mdumf))
+print(c1_formula)
+```
+
+```{r}
+library(glmmML)
+# c1 <- glmmboot(samegroup ~ difchoice1+frfamcl+dcfrfamcl, cluster = municode,family = binomial, data = Dyadic)
+# c1
+c1 <- glm(c1_formula,family = binomial(link="logit"), data = Dyadic_mdum)
+c1
+```
+```{r}
+coef(c1)
+```
+
+
+```{r}
+#marginal effect function
+# mfxboot <- function(model,data,dist,boot=1000,digits=3){
+#   x <- model
+#   # get marginal effects
+#   pdf <- ifelse(dist=="probit",
+#                 mean(dnorm(predict(x, type = "link"))),
+#                 mean(dlogis(predict(x, type = "link"))))
+#   marginal.effects <- pdf*coef(x)
+#   # start bootstrap
+#   bootvals <- matrix(rep(NA,boot*length(coef(x))), nrow=boot)
+#   set.seed(1111)
+#   for(i in 1:boot){
+#     samp1 <- data[sample(1:dim(data)[1],replace=T,dim(data)[1]),]
+#     x1 <- glm(modform, family=binomial(link=dist),samp1)
+#     pdf1 <- ifelse(dist=="probit",
+#                    mean(dnorm(predict(x, type = "link"))),
+#                    mean(dlogis(predict(x, type = "link"))))
+#     bootvals[i,] <- pdf1*coef(x1)
+#   }
+#   res <- cbind(marginal.effects,apply(bootvals,2,sd),marginal.effects/apply(bootvals,2,sd))
+#   if(names(x$coefficients[1])=="(Intercept)"){
+#     res1 <- res[2:nrow(res),]
+#     res2 <- matrix(as.numeric(sprintf(paste("%.",paste(digits,"f",sep=""),sep=""),res1)),nrow=dim(res1)[1])
+#     rownames(res2) <- rownames(res1)
+#   } else {
+#     res2 <- matrix(as.numeric(sprintf(paste("%.",paste(digits,"f",sep=""),sep="")),nrow=dim(res)[1]))
+#     rownames(res2) <- rownames(res)
+#   }
+#   colnames(res2) <- c("marginal.effect","standard.error","z.ratio")
+#   return(res2)
+# }
+# mfxboot(c1,"logit",Dyadic,boot=1000,digits=3)
+```
+
+```{r}
+library(margins)
+c1_m<-margins(c1, type = "link",variables = c("difchoice1","frfamcl","dcfrfamcl"))
+```
+
+
+```{r}
+summary(c1_m)
+```
+
+```{r}
+c2_formula <- paste("samegroup ~ difchoice1 +friend2+ friendfamily+ family2 +friend1 +family1+ frfamcl+ dcfrfamcl +difurban +diffemale+ difyage +difysch+ difmarried+ difcons +difhhsize +difwin1 +sumchoice1+ sumurban+ sumfemale +sumyage +sumysch +nummarried +sumcons +sumhhsize +sumwin1 +",mdumf)
+print(c2_formula)
+c2 <- glmmboot(c2_formula, cluster = municode,family = binomial(link="logit"), data = Dyadic)
+c2
+mfxboot(c2_formula,"logit",Dyadic,boot=1000,digits=3)
+```
+
+
+```{r}
+Dyadic_c3<-Dyadic%>%
+  filter(frfamcl==1)
+c3_formula <- paste("samegroup ~ difchoice1 + friend2+ friendfamily +family2 +friend1 +difurban +diffemale+ difyage +difysch +difmarried +difcons+ difhhsize +difwin1+ sumchoice1 +sumurban+ sumfemale +sumyage+ sumysch +nummarried +sumcons+ sumhhsize +sumwin1+",mdumf)
+print(c3_formula)
+c3 <- glmmboot(c3_formula, cluster = municode,family = binomial(link="logit"), data = Dyadic_c3)
+c3
+mfxboot(c3_formula,"logit",Dyadic,boot=1000,digits=3)
+```
+
+```{r}
+Dyadic_c4<-Dyadic%>%
+  filter(frfamcl==0)
+c4_formula <- paste("samegroup ~ difchoice1 + friend2+ friendfamily +family2 +friend1 +family1+difurban +diffemale+ difyage +difysch +difmarried +difcons+ difhhsize +difwin1+ sumchoice1 +sumurban+ sumfemale +sumyage+ sumysch +nummarried +sumcons+ sumhhsize +sumwin1+",mdumf)
+print(c4_formula)
+c4 <- glmmboot(c4_formula, cluster = municode,family = binomial(link="logit"), data = Dyadic_c4)
+c4
+mfxboot(c4_formula,"logit",Dyadic,boot=1000,digits=3)
+```
+

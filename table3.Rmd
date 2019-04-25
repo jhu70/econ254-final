@@ -81,16 +81,8 @@ c2$gamble_5[is.na(c2$gamble_5)] <- c2$gamble_5[!is.na(c2$gamble_5)]
 c2$gamble_6[is.na(c2$gamble_6)] <- c2$gamble_6[!is.na(c2$gamble_6)]
 
 c2<-c2*100
-c2<-data.frame(choice = "choice2", c2)%>%
+c2<-data.frame(choice = "choice1", c2)%>%
   gather(key = "gamble", "prop", gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
-  
-c3<-merge(c1, c2, all = TRUE)%>%  
-  group_by(gamble,choice)%>%
-  summarise(meanprop = mean(prop))%>%
-  spread(choice,meanprop)
-
-c3<-data.frame(round = "1", c3)
-
   
 ```
 
@@ -123,7 +115,7 @@ c1b$gamble_5[is.na(c1b$gamble_5)] <- c1b$gamble_5[!is.na(c1b$gamble_5)]
 c1b$gamble_6[is.na(c1b$gamble_6)] <- c1b$gamble_6[!is.na(c1b$gamble_6)]
 
 c1b<-c1b*100
-c1b<-data.frame(choice = "choice1", c1b)%>%
+c1b<-data.frame(choice = "choice2", c1b)%>%
   gather(key = "gamble", "prop", gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
 ```
 
@@ -155,7 +147,11 @@ c2b<-c2b*100
 c2b<-data.frame(choice = "choice2", c2b)%>%
   gather(key = "gamble", "prop", gamble_1, gamble_2, gamble_3, gamble_4, gamble_5, gamble_6)
   
-c3b<-merge(c1b, c2b, all = TRUE)%>%  
+
+```
+
+```{r}
+c3b<-merge(c2, c2b, all = TRUE)%>%  
   group_by(gamble,choice)%>%
   summarise(meanprop = mean(prop))%>%
   spread(choice,meanprop)
@@ -163,6 +159,17 @@ c3b<-merge(c1b, c2b, all = TRUE)%>%
 c3b<-data.frame(round = "2", c3b)
 
 ```
+
+
+```{r}
+c3<-merge(c1, c1b, all = TRUE)%>%  
+  group_by(gamble,choice)%>%
+  summarise(meanprop = mean(prop))%>%
+  spread(choice,meanprop)
+
+c3<-data.frame(round = "1", c3)
+```
+
 
 ```{r}
 gamblechoice<-merge(c3,c3b,all = TRUE)%>%
@@ -209,8 +216,10 @@ vectorsum2<-na.omit(vectorsum2)%>%
 ```{r}
 others<- merge(vectorsum1, vectorsum2, all = TRUE)
 total<- merge(others, gamblechoice, all = TRUE)
+total[[4]] <- as.numeric(total[[4]])
+total[[6]] <- as.numeric(total[[6]])
 is.num <- sapply(total, is.numeric)
-total[is.num] <- lapply(total[is.num], round, 4)
+total[is.num] <- lapply(total[is.num], round, 3)
 total<-arrange(total,round, Vars)
 total[1,4]<- " "
 total[9,4]<-" "
@@ -256,14 +265,46 @@ total[18,3] <- total[18,3]*100
 total[18,5] <- total[18,5]*100
 total[19,3] <- total[19,3]*100
 total[19,5] <- total[19,5]*100
-total[["Vars"]]<- c("Won gamble in 1st round","Number of co-group members","Gamble 1(safe)","Gamble 2","Gamble 3", "Gamble 4", "Gamble 5", "Gamble 6(riskiest)","Joined a group","Winings 1st round ('000 Pesos)","Won gamble in 2nd round", "Gamble 1", "Gamble 2", "Gamble 3", "Gamble 4", "Gamble 5", "Gamble 6","Reneged having lost gamble","Reneged having won gamble","Winnings 2nd round ('000 Pesos)")
+
+
+is.num <- sapply(total, is.numeric)
+total[is.num] <- lapply(total[is.num], round, 3)
+```
+
+```{R}
+library(kableExtra)
+
+library(dplyr)
+total<-total[c(3:8,1,10,9,2,12:17,11,19,18,20:nrow(total)),]
+
+total[["round"]]<- c("Gamble 1(safe)","Gamble 2","Gamble 3", "Gamble 4", "Gamble 5", "Gamble 6(riskiest)","Won gamble in 1st round","Winings 1st round ('000 Pesos)","Joined a group","Number of co-group members","Gamble 1(safe)", "Gamble 2", "Gamble 3", "Gamble 4", "Gamble 5", "Gamble 6(riskiest)","Won gamble in 2nd round","Reneged having won gamble","Reneged having lost gamble","Winnings 2nd round ('000 Pesos)")
+
+total[["Vars"]]<- c("","","", "", "", "","","","","", "", "", "", "", "", "","","","","")
+
+total<-total[,c(2,1,3:ncol(total))]
 head(total)
 ```
 
-```{r}
-total <- rbind(c("", "", "Full-","Sample","Sample-","Analysed"), total)
-colnames(total) =  c(" ","round","Mean/Prop","s.d.(a)","Mean/Prop","s.d.(a)")
+```{r percentage formatting} 
+total[1:7,3]<-paste(total[1:7,3],"%", sep="")
+total[1:7,5]<-paste(total[1:7,5],"%", sep="")
+total[9,3]<-paste(total[9,3],"%", sep="")
+total[9,5]<-paste(total[9,5],"%", sep="")
+total[11:19,3]<-paste(total[11:19,3],"%", sep="")
+total[11:19,5]<-paste(total[11:19,5],"%", sep="")
+```
 
+```{r}
+total <- rbind(total,c("Observations", " ", "2506"," ","2321"," "))
+colnames(total) =  c(" ","  ","Mean/Prop(Full Sample)","s.d.(Full Sample)","Mean/Prop(Sample Analysed)","s.d.(Sample Analysed)")
+
+```
+
+```{r}
+row.names(total) <- NULL
+total$Vars <- NULL
+is.num <- sapply(total, is.numeric)
+total[is.num] <- lapply(total[is.num], round, 3)
 ```
 
 
@@ -271,4 +312,17 @@ colnames(total) =  c(" ","round","Mean/Prop","s.d.(a)","Mean/Prop","s.d.(a)")
 stargazer(total, type = "html", out = "summary.html",summary.stat = c("mean"), summary = FALSE, title = "Table3: Experimental data")
 
 ```
+
+```{r empty space replace NA}
+total[is.na(total)] <- " "
+```
+
+row_spec(1, hline_after = T)
+```{r, result = 'asis'}
+#position = "float_right" 
+library(kableExtra)
+library(params)
+library(knitr)
+knitr::kable(total,format = "html",  row.names = NA, digits = getOption("3"), col.names = c("Variables"," ","Mean/Prop","s.d.","Mean/Prop","s.d."), align = 'l',escape = F,booktabs = F)%>%
+ add_header_above(c(" " = 2, "Full Sample" = 2,"Sample Analysed" = 2))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size = 16)%>%column_spec(4,border_right = T)%>%column_spec(2,italic = T)%>%add_header_above(c("Table3: Experimental data"=6))%>%pack_rows("Gamble choice 1st round",1,6,bold = T)%>%pack_rows("Gamble choice 2nd round", 11,16,bold = T)
 ```
