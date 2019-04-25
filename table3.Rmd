@@ -199,8 +199,9 @@ vectorsum1<-na.omit(vectorsum1)%>%
 
 ```{r}
 #need to fix decimal points
-vectorsum2<-vector%>%
-  filter(insample==1)%>%
+
+vectorsum2 <- vector[vector$insample==1, ]
+vectorsum2<-vectorsum2%>%
   select(blue1,win1, group, cogrpmem, blue2, renegadelose, renegadewin, win2)%>%
   gather(key = "Vars","Value",blue1,win1, group, cogrpmem, blue2, renegadewin, win2,renegadelose)
  
