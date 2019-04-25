@@ -42,6 +42,9 @@ Dyadic<-Dyadic%>%
 
 
 ```{r}
+
+
+star<-Dyadic
 pervar<-c("samegroup","friend2","friendfamily","stranger", "frfam","family2", "friend1", "family1", "frfamcl", "difurban", "diffemale","difmarried")
 for (i in pervar) {
 star[[i]] <- (as.numeric(Dyadic[[i]]))*100
