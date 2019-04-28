@@ -1,0 +1,56 @@
+---
+title: "hkufwgjekworp"
+output: html_document
+---
+
+```{r}
+library(haven)
+library(tidyverse)
+library(yardstick)
+library(ggplot2)
+library(mosaic)
+library(stargazer)
+require(Stat2Data)
+library(scales)
+library(readr)
+library(rms)
+library(pastecs)
+library(tidyr)
+Dyadic_dta<- read_dta("Data/AttanasioEtAl2011Vector.dta")
+vector<-read.csv("vector.csv")%>%
+  mutate(renegadelose = renegade - renegadewin)
+```
+##Table 1 but not pretty
+
+```{r}
+vectorsum1<-vector%>%
+  select(female, yage, ysch, head, married, urbr_2, tcons, lcons, survhhsz, familyoutdeg,friendsoutdeg) %>%
+  gather(key = "Vars","Value",female, yage, ysch, head, married, urbr_2, tcons, lcons, survhhsz, familyoutdeg, friendsoutdeg)
+
+vectorsum1<-na.omit(vectorsum1)%>%
+  group_by(Vars)%>%
+  summarise_each(funs(mean_fullsample = mean(Value), sd_fullsample = sd(Value)))%>%
+  mutate(round = c(1:11))
+```
+
+```{r}
+vectorsum2 <- vector[vector$insample==1, ]
+vectorsum2<-vectorsum2%>%
+  select(female, yage, ysch, head, married, urbr_2, tcons, lcons, survhhsz, familyoutdeg,friendsoutdeg)%>%
+  gather(key = "Vars","Value",female, yage, ysch, head, married, urbr_2, tcons, lcons, survhhsz, familyoutdeg,friendsoutdeg)
+ 
+vectorsum2<-na.omit(vectorsum2)%>%
+  group_by(Vars)%>%
+  summarise_each(funs(mean_sampleanalysed = mean(Value), sd_sampleanalysed = sd(Value)))%>%
+  mutate(round = c(1:11))
+
+
+
+merge(vectorsum1, vectorsum2)
+```
+
+
+
+
+
+
