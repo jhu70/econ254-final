@@ -1,0 +1,87 @@
+---
+title: "Tables and Figures"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+##Table1: Experimental subjects
+
+```{r}
+library(tidyverse)
+library(yardstick)
+library(ggplot2)
+library(mosaic)
+library(stargazer)
+require(Stat2Data)
+library(scales)
+library(readr)
+library(rms)
+library(dplyr)
+```
+
+```{r}
+library(haven)
+library(pastecs)
+Vector1<- read_dta("Data/AttanasioEtAl2011Vector.dta")
+```
+
+```{r}
+TableOne<-Vector1
+pervar<-c("female","yage", "ysch", "married","urbr_2","tcons","lcons",  "survhhsz", "familyoutdeg", "friendsoutdeg")
+for (i in pervar) {
+TableOne[[i]] <- (as.numeric(Vector1[[i]]))*100
+}
+```
+
+```{r}
+stargazer(subset(TableOne[c("female","yage", "ysch", "married","urbr_2","tcons","lcons","survhhsz", "familyoutdeg", "friendsoutdeg")],TableOne$inreg ==0, type = "html", title="Table1: Experimental Subjects", digits=4, out="table1.html", covariate.labels = c("Female", "Age (years)", "Education (years)", "Household head", "Married", "Lives in municipal centre", "Household consumption ('000pesos/month)", "Log household consumption per month", "Household size", "# of kin recognized in session", "# of friends recognized in session"),summary.stat = c("mean", "sd")))
+```
+
+```{r}
+table(Vector1$difchoice1, Vector1$samegroup)
+```
+
+
+
+
+
+
+
+
+
+
+
+```{r, eval = FALSE}
+glimpse(Vector1$inreg)
+```
+
+```{r, eval = FALSE}
+str(Vector1)
+```
+
+
+
+
+```{r}
+tally(~Vector1$female, c = 2506)
+Vector1<-Vector1%>%
+  mutate(female = 1 - as.numeric(Vector1$female))
+```
+
+
+```{r}
+gather(Vector1, na.omit)
+```
+
+
+
+```{r}
+stargazer(subset(Vector1[c("female","yage", "ysch", "married","urbr_2","tcons","lcons",  "survhhsz", "familyoutdeg", "friendsoutdeg")], type = "text", title="Table 1: Experimental subjects", out="table1.html", covariate.labels=c("Female", "Age (years)", "Education (years)", "Household head", "Married", "Lives in municipal centre", "Household consumption ('000pesos/month)", "Log household consumption per month", "Household size", "# of kin recognized in session", "# of friends recognized in session")),summary.stat = c("mean", "sd"))
+```
+
+
+
