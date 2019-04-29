@@ -1,6 +1,7 @@
 ---
 title: "hkufwgjekworp"
-output: html_document
+author: "Abby and Jocelyn"
+output: pdf_document
 ---
 
 ```{r}
@@ -24,33 +25,79 @@ vector<-read.csv("vector.csv")%>%
 
 ```{r}
 vectorsum1<-vector%>%
-  select(female, yage, ysch, head, married, urbr_2, tcons, lcons, survhhsz, familyoutdeg,friendsoutdeg) %>%
+  mutate(female = female*100, head = head*100,married = married*100,urbr_2=urbr_2*100,tcons = tcons/1000)%>%
+  select(female, yage, ysch, head, married, urbr_2, tcons, lcons, survhhsz, familyoutdeg,friendsoutdeg)%>%
   gather(key = "Vars","Value",female, yage, ysch, head, married, urbr_2, tcons, lcons, survhhsz, familyoutdeg, friendsoutdeg)
 
 vectorsum1<-na.omit(vectorsum1)%>%
   group_by(Vars)%>%
-  summarise_each(funs(mean_fullsample = mean(Value), sd_fullsample = sd(Value)))%>%
+  summarise_each(funs(Obs = length(Vars),mean_fullsample = mean(Value), sd_fullsample = sd(Value)))%>%
   mutate(round = c(1:11))
 ```
 
 ```{r}
 vectorsum2 <- vector[vector$insample==1, ]
 vectorsum2<-vectorsum2%>%
+  mutate(female = female*100, head = head*100,married = married*100,urbr_2=urbr_2*100,tcons = tcons/1000)%>%
   select(female, yage, ysch, head, married, urbr_2, tcons, lcons, survhhsz, familyoutdeg,friendsoutdeg)%>%
   gather(key = "Vars","Value",female, yage, ysch, head, married, urbr_2, tcons, lcons, survhhsz, familyoutdeg,friendsoutdeg)
  
 vectorsum2<-na.omit(vectorsum2)%>%
   group_by(Vars)%>%
-  summarise_each(funs(mean_sampleanalysed = mean(Value), sd_sampleanalysed = sd(Value)))%>%
-  mutate(round = c(1:11))
+  summarise_each(funs(Obs = length(Vars),mean_sampleanalysed = mean(Value), sd_sampleanalysed = sd(Value)))
+```
 
 
+```{R}
 
-merge(vectorsum1, vectorsum2)
+table1<-merge(vectorsum1, vectorsum2, by = "Vars")%>%
+  mutate(Vars = c("No. of kin recognized in session","Female","No. of friends recognized in session","Household head","Log household consumption per month","Married","Household size","Household consumption ('000 Pesos/month) 2","Lives in municipal centre","Age (years)","Education (years)"))
+
+is.num <- sapply(table1, is.numeric)
+table1[is.num] <- lapply(table1[is.num], round, 3)
+
+```
+
+```{r}
+table1[2,3]<-paste(table1[2,3],"%",sep = "")
+table1[4,3]<-paste(table1[4,3],"%",sep = "")
+table1[6,3]<-paste(table1[6,3],"%",sep = "")
+table1[9,3]<-paste(table1[9,3],"%",sep = "")
+
+table1[2,7]<-paste(table1[2,7],"%",sep = "")
+table1[4,7]<-paste(table1[4,7],"%",sep = "")
+table1[6,7]<-paste(table1[6,7],"%",sep = "")
+table1[9,7]<-paste(table1[9,7],"%",sep = "")
+
+table1[1,4]<-" "
+table1[4,4]<-" "
+table1[5,4]<-" "
+table1[6,4]<-" "
+
+
+table1[1,7]<-" "
+table1[4,7]<-" "
+table1[5,7]<-" "
+table1[6,7]<-" "
+```
+
+```{r}
+or <- c("2", "10","11","4","6","9","8","5","7","1","3")
+
+table1%>%
+  slice(match(or, round))
+
+table1$round = NULL
 ```
 
 
 
-
-
+```{r, result = 'asis'}
+#position = "float_right" 
+library(kableExtra)
+library(params)
+library(knitr)
+knitr::kable(table1,format = "html",row.names = NA, col.names = c(" ","Obs.","Mean/Prop","s.d.","Obs.","Mean/Prop","s.d."), align = 'l',escape = F,booktabs = F)%>%
+ add_header_above(c(" " = 1, "Full Sample" = 3,"Sample Analysed" = 3))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size = 16)%>%add_header_above(c("Table 1: Experimental subjects"=7))
+```
 

@@ -1,8 +1,14 @@
 ---
 title: "results reproduction"
-output: html_document
+output: pdf_document
+  toc: true
+    number_sections: true
 author: "Jocelyn Hu"
 ---
+```{r, include = FALSE}
+options(tinytex.verbose = TRUE)
+```
+
 ```{r}
 library(tidyverse)
 library(yardstick)
@@ -176,7 +182,7 @@ table4[is.num] <- lapply(table4[is.num], round, 3)
 library(kableExtra)
 library(params)
 library(knitr)
-knitr::kable(table4,format = "html",row.names = NA, col.names = c("Mean/Prop","s.d.","Mean/Prop","s.d."), align = 'l',escape = F,booktabs = F)%>%
+knitr::kable(table4,format = "latex",row.names = NA, col.names = c("Mean/Prop","s.d.","Mean/Prop","s.d."), align = 'l',escape = F,booktabs = F)%>%
  add_header_above(c(" " = 1, "All dyads" = 2,"Close family and friends" = 1, "Other dyads" =1))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size = 16)%>%column_spec(1,border_right = T)%>%column_spec(2,italic = T)%>%add_header_above(c("Table4: Experimental data"=5))
 ```
 

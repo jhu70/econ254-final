@@ -1,8 +1,13 @@
 ---
 title: "results reproduction"
-output: html_document
+output: pdf_document
 author: "Jocelyn Hu"
 ---
+
+```{r, include = FALSE}
+options(tinytex.verbose = TRUE)
+```
+
 ```{r}
 library(tidyverse)
 library(yardstick)
@@ -24,9 +29,6 @@ vector<-read.csv("vector.csv") %>%
   mutate(renegadelose = renegade - renegadewin)
 ```
 
-```{r}
-tally(~vector$choice1)
-```
 
 
 ```{r table 3 stata}
@@ -92,7 +94,7 @@ c2<-data.frame(choice = "choice1", c2)%>%
 vector2 <- vector[vector$insample==1, ]
 ```
 
-```{r table 3 stata}
+```{r}
 c1b<-as.data.frame(table(vector2$choice1))%>%
   mutate(Prop = Freq/sum(Freq))%>%
   spread(Var1, Prop)
@@ -324,6 +326,6 @@ row_spec(1, hline_after = T)
 library(kableExtra)
 library(params)
 library(knitr)
-knitr::kable(total,format = "html",  row.names = NA, digits = getOption("3"), col.names = c("Variables"," ","Mean/Prop","s.d.","Mean/Prop","s.d."), align = 'l',escape = F,booktabs = F)%>%
- add_header_above(c(" " = 2, "Full Sample" = 2,"Sample Analysed" = 2))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size = 16)%>%column_spec(4,border_right = T)%>%column_spec(2,italic = T)%>%add_header_above(c("Table3: Experimental data"=6))%>%pack_rows("Gamble choice 1st round",1,6,bold = T)%>%pack_rows("Gamble choice 2nd round", 11,16,bold = T)
+knitr::kable(total,format = "latex",row.names = NA, digits = getOption("3"), col.names = c("Variables"," ","Mean/Prop","s.d.","Mean/Prop","s.d."), align = 'l',escape = F,booktabs = F)%>%
+ add_header_above(c(" " = 2, "Full Sample" = 2,"Sample Analysed" = 2))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size = 6)%>%column_spec(4,border_right = T)%>%column_spec(2,italic = T)%>%add_header_above(c("Table3: Experimental data"=6))%>%pack_rows("Gamble choice 1st round",1,6,bold = T)%>%pack_rows("Gamble choice 2nd round", 11,16,bold = T)
 ```

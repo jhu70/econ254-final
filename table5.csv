@@ -1,9 +1,9 @@
-"","factor","1","2","3","4","5"
-"1","Difference in gamble choice (round 1)","-0.014","-0.012"," "," "," "
-"2","Close friends and family","-0.001","0.001","-0.018","0","-0.001"
-"3","Diff. in gamble choice 1 x Close friends and family","0.153","0.043"," "," "," "
-"4","Both recognised friendship"," ","0.068"," ","0.045","0.045"
-"5","Both recognised kinship"," ","0.136","0.213","0.105","0.106"
-"6","One recognised friendship, other kinship"," ","0.069","0.017","0.066","0.067"
-"7","One recognised friendship"," ","0.169","0.229","0.159","0.16"
-"8","One recognised kinship"," ","0.134","0.153","0.13","0.131"
+"","factor","AME.x","SE","ncolumn.x","AME.y","ncolumn.y","AME.x","ncolumn.x","AME.y","ncolumn.y","AME","ncolumn"
+"1","dcfrfamcl",-0.0139,NA,1,-0.0123,2,NA,NA,NA,NA,NA,NA
+"2","difchoice1",-9e-04,NA,1,5e-04,2,-0.0178,3,-1e-04,4,-7e-04,5
+"3","family1",NA,NA,NA,0.068,2,NA,NA,0.0448,4,0.0447,5
+"4","family2",NA,NA,NA,0.1359,2,0.2131,3,0.1051,4,0.1057,5
+"5","frfamcl",0.153,NA,1,0.0434,2,NA,NA,NA,NA,NA,NA
+"6","friend1",NA,NA,NA,0.0693,2,0.0166,3,0.0656,4,0.0667,5
+"7","friend2",NA,NA,NA,0.1693,2,0.2287,3,0.1593,4,0.16,5
+"8","friendfamily",NA,NA,NA,0.134,2,0.1525,3,0.1298,4,0.1311,5

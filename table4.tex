@@ -1,0 +1,792 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={results reproduction},
+            pdfauthor={Jocelyn Hu},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{results reproduction}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Jocelyn Hu}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+    \date{}
+    \predate{}\postdate{}
+  
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages -------------- tidyverse 1.2.1 --
+\end{verbatim}
+
+\begin{verbatim}
+## v ggplot2 3.1.1       v purrr   0.3.2  
+## v tibble  2.1.1       v dplyr   0.8.0.1
+## v tidyr   0.8.3       v stringr 1.4.0  
+## v readr   1.3.1       v forcats 0.4.0
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ----------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(yardstick)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## For binary classification, the first factor level is assumed to be the event.
+## Set the global option `yardstick.event_first` to `FALSE` to change this.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'yardstick'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:readr':
+## 
+##     spec
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(mosaic)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: lattice
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: ggformula
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: ggstance
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'ggstance'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:ggplot2':
+## 
+##     geom_errorbarh, GeomErrorbarh
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## New to ggformula?  Try the tutorials: 
+##  learnr::run_tutorial("introduction", package = "ggformula")
+##  learnr::run_tutorial("refining", package = "ggformula")
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: mosaicData
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: Matrix
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'Matrix'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:tidyr':
+## 
+##     expand
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## The 'mosaic' package masks several functions from core packages in order to add 
+## additional features.  The original behavior of these functions should not be affected by this.
+## 
+## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'mosaic'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:Matrix':
+## 
+##     mean
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:dplyr':
+## 
+##     count, do, tally
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:purrr':
+## 
+##     cross
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:ggplot2':
+## 
+##     stat
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
+##     prop.test, quantile, sd, t.test, var
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     max, mean, min, prod, range, sample, sum
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(stargazer)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Please cite as:
+\end{verbatim}
+
+\begin{verbatim}
+##  Hlavac, Marek (2018). stargazer: Well-Formatted Regression and Summary Statistics Tables.
+\end{verbatim}
+
+\begin{verbatim}
+##  R package version 5.2.2. https://CRAN.R-project.org/package=stargazer
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{require}\NormalTok{(Stat2Data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: Stat2Data
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(scales)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'scales'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:mosaic':
+## 
+##     rescale
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:purrr':
+## 
+##     discard
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:readr':
+## 
+##     col_factor
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(readr)}
+\KeywordTok{library}\NormalTok{(rms)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: Hmisc
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: survival
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: Formula
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'Hmisc'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:dplyr':
+## 
+##     src, summarize
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     format.pval, units
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: SparseM
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'SparseM'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:base':
+## 
+##     backsolve
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(haven)}
+\NormalTok{Dyadic_dta<-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\StringTok{"Data/AttanasioEtAl2011Dyadic.dta"}\NormalTok{)}
+\NormalTok{Dyadic<-}\KeywordTok{read.csv}\NormalTok{(}\StringTok{"Dyadic.csv"}\NormalTok{)}
+\NormalTok{Dyadic_mdum<-}\KeywordTok{read.csv}\NormalTok{(}\StringTok{"Dyadic_mdum.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{glimpse}\NormalTok{(Dyadic_dta}\OperatorTok{$}\NormalTok{inreg)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(Dyadic)}
+\end{Highlighting}
+\end{Shaded}
+
+Mutate var stranger which does no exist in the original dataframe
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{tally}\NormalTok{(}\OperatorTok{~}\NormalTok{Dyadic}\OperatorTok{$}\NormalTok{municode)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Dyadic$municode
+##    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15 
+## 1122  702  342  210  756 1560  462  992  462  420 2162  650 1122 1260 1122 
+##   16   17   18   19   20   21   22   23   24   25   26   27   28   29   30 
+##  600  812 1332 2256 1806  702  272 1332  756  210  992 1482  756 1406  650 
+##   31   32   33   34   35   36   37   38   39   40   41   42   43   44   45 
+## 1806  992 1640  600  930  240 1560 1892 2756 2070 1332 2352 1560  182   72 
+##   46   47   48   49   50   51   52   53   54   55   56   57   58   59   60 
+##  992  342 1332  992  462 1560 1406 2550 2162 1406  992  992  462 1722 1482 
+##   61   62   63   64   65   66   67   68   69   70 
+## 2256 1640 1406 1722 2450 1332 7482  506  870 1056
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{tally}\NormalTok{(}\OperatorTok{~}\NormalTok{Dyadic}\OperatorTok{$}\NormalTok{samegroup)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Dyadic$samegroup
+##     0     1 
+## 78892  9374
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Dyadic<-na.omit(Dyadic) }
+\NormalTok{Dyadic<-Dyadic}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{stranger =} \DecValTok{1} \OperatorTok{-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(Dyadic}\OperatorTok{$}\NormalTok{frfam))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{star<-Dyadic}
+\NormalTok{pervar<-}\KeywordTok{c}\NormalTok{(}\StringTok{"samegroup"}\NormalTok{,}\StringTok{"friend2"}\NormalTok{,}\StringTok{"friendfamily"}\NormalTok{,}\StringTok{"stranger"}\NormalTok{, }\StringTok{"frfam"}\NormalTok{,}\StringTok{"family2"}\NormalTok{, }\StringTok{"friend1"}\NormalTok{, }\StringTok{"family1"}\NormalTok{, }\StringTok{"frfamcl"}\NormalTok{, }\StringTok{"difurban"}\NormalTok{, }\StringTok{"diffemale"}\NormalTok{,}\StringTok{"difmarried"}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ pervar) \{}
+\NormalTok{star[[i]] <-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(Dyadic[[i]]))}\OperatorTok{*}\DecValTok{100}
+\NormalTok{\}}
+\CommentTok{# }
+\CommentTok{# Dyadic[["sumtcons"]] <- (as.numeric(Dyadic[["sumtcons"]]))/1000}
+\CommentTok{# }
+\CommentTok{# Dyadic[["diftcons"]] <- (as.numeric(Dyadic[["diftcons"]]))/1000}
+\end{Highlighting}
+\end{Shaded}
+
+\url{https://www.princeton.edu/~otorres/NiceOutputR.pdf}
+
+The variable difmar's name should be `difmarried' and nummar should be
+nummarried.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{stargazer}\NormalTok{(}\KeywordTok{subset}\NormalTok{(star[}\KeywordTok{c}\NormalTok{(}\StringTok{"samegroup"}\NormalTok{,}\StringTok{"difchoice1"}\NormalTok{,}\StringTok{"sumchoice1"}\NormalTok{,}\StringTok{"frfam"}\NormalTok{,}\StringTok{"friend2"}\NormalTok{,}\StringTok{"friendfamily"}\NormalTok{, }\StringTok{"family2"}\NormalTok{, }\StringTok{"friend1"}\NormalTok{, }\StringTok{"family1"}\NormalTok{,}\StringTok{"stranger"}\NormalTok{,}\StringTok{"frfamcl"}\NormalTok{, }\StringTok{"difurban"}\NormalTok{, }\StringTok{"diffemale"}\NormalTok{, }\StringTok{"difyage"}\NormalTok{, }\StringTok{"difysch"}\NormalTok{, }\StringTok{"difmarried"}\NormalTok{,}\StringTok{"diftcons"}\NormalTok{,}\StringTok{"difcons"}\NormalTok{, }\StringTok{"difhhsize"}\NormalTok{,}\StringTok{"difwin1"}\NormalTok{,}\StringTok{"sumurban"}\NormalTok{,}\StringTok{"sumfemale"}\NormalTok{,}\StringTok{"sumyage"}\NormalTok{, }\StringTok{"sumysch"}\NormalTok{, }\StringTok{"nummarried"}\NormalTok{, }\StringTok{"sumtcons"}\NormalTok{, }\StringTok{"sumcons"}\NormalTok{, }\StringTok{"sumhhsize"}\NormalTok{, }\StringTok{"sumwin1"}\NormalTok{)],star}\OperatorTok{$}\NormalTok{inreg }\OperatorTok{==}\DecValTok{1}\NormalTok{), }\DataTypeTok{type =} \StringTok{"html"}\NormalTok{, }\DataTypeTok{title=}\StringTok{"Table4: Dyadic Variables"}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{4}\NormalTok{, }\DataTypeTok{out=}\StringTok{"table4.html"}\NormalTok{, }\DataTypeTok{covariate.labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Joined same group in round 2(%)"}\NormalTok{, }\StringTok{"Difference in gamble choice(round1)"}\NormalTok{,}\StringTok{"Sum of gamble choices (round 1)"}\NormalTok{, }\StringTok{"Friends and family: One or both recognized friendship or kinship(%)"}\NormalTok{,}\StringTok{"Both recognized friendship(%)"}\NormalTok{,}\StringTok{"Both recognized kinship(%)"}\NormalTok{,}\StringTok{"One recognized friendship, other kinship(%)"}\NormalTok{,}\StringTok{"One recognized friendship(%)"}\NormalTok{, }\StringTok{"One recognized kinship(%)"}\NormalTok{, }\StringTok{"Stranger(%)"}\NormalTok{,}\StringTok{"Geographically proximate friends and family(%)"}\NormalTok{,}\StringTok{"One lives in the municipal centre, one not(%)"}\NormalTok{,}\StringTok{"Different genders(%)"}\NormalTok{,}\StringTok{"Difference in age(years)"}\NormalTok{,}\StringTok{"Difference in education (years)"}\NormalTok{,}\StringTok{"Difference in marital status(%)"}\NormalTok{,}\StringTok{"Difference in household consumption ('000s Pesos/month)"}\NormalTok{,}\StringTok{"Difference in log household consumption per month"}\NormalTok{,}\StringTok{"Difference in household size"}\NormalTok{,}\StringTok{"Difference in round 1 winnings ('000 Pesos)"}\NormalTok{,}\StringTok{"Number who live in the municipal centre"}\NormalTok{,}\StringTok{"Number of females"}\NormalTok{,}\StringTok{"Sum of ages (years)"}\NormalTok{,}\StringTok{"Sum of education (years)"}\NormalTok{,}\StringTok{"Number married"}\NormalTok{,}\StringTok{"Sum of household consumption ('000s Pesos/month)"}\NormalTok{,}\StringTok{"Sum of log household consumption per month"}\NormalTok{,}\StringTok{"Sum of household sizes"}\NormalTok{,}\StringTok{"Sum of round 1 winnings ('000s Pesos)"}\NormalTok{), }\DataTypeTok{summary.stat =} \KeywordTok{c}\NormalTok{(}\StringTok{"mean"}\NormalTok{, }\StringTok{"sd"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## <table style="text-align:center"><caption><strong>Table4: Dyadic Variables</strong></caption>
+## <tr><td colspan="3" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">Statistic</td><td>Mean</td><td>St. Dev.</td></tr>
+## <tr><td colspan="3" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">Joined same group in round 2(%)</td><td>9.2096</td><td>28.9164</td></tr>
+## <tr><td style="text-align:left">Difference in gamble choice(round1)</td><td>1.6391</td><td>1.2648</td></tr>
+## <tr><td style="text-align:left">Sum of gamble choices (round 1)</td><td>7.1789</td><td>2.1228</td></tr>
+## <tr><td style="text-align:left">Friends and family: One or both recognized friendship or kinship(%)</td><td>10.4903</td><td>30.6430</td></tr>
+## <tr><td style="text-align:left">Both recognized friendship(%)</td><td>2.4272</td><td>15.3895</td></tr>
+## <tr><td style="text-align:left">Both recognized kinship(%)</td><td>0.1757</td><td>4.1878</td></tr>
+## <tr><td style="text-align:left">One recognized friendship, other kinship(%)</td><td>0.4531</td><td>6.7159</td></tr>
+## <tr><td style="text-align:left">One recognized friendship(%)</td><td>6.9003</td><td>25.3461</td></tr>
+## <tr><td style="text-align:left">One recognized kinship(%)</td><td>0.5340</td><td>7.2880</td></tr>
+## <tr><td style="text-align:left">Stranger(%)</td><td>89.5097</td><td>30.6430</td></tr>
+## <tr><td style="text-align:left">Geographically proximate friends and family(%)</td><td>5.1619</td><td>22.1259</td></tr>
+## <tr><td style="text-align:left">One lives in the municipal centre, one not(%)</td><td>30.9508</td><td>46.2293</td></tr>
+## <tr><td style="text-align:left">Different genders(%)</td><td>20.5368</td><td>40.3972</td></tr>
+## <tr><td style="text-align:left">Difference in age(years)</td><td>12.4041</td><td>9.6816</td></tr>
+## <tr><td style="text-align:left">Difference in education (years)</td><td>3.2346</td><td>2.7703</td></tr>
+## <tr><td style="text-align:left">Difference in marital status(%)</td><td>34.6841</td><td>47.5967</td></tr>
+## <tr><td style="text-align:left">Difference in household consumption ('000s Pesos/month)</td><td>232,840.3000</td><td>227,243.5000</td></tr>
+## <tr><td style="text-align:left">Difference in log household consumption per month</td><td>0.5894</td><td>0.4892</td></tr>
+## <tr><td style="text-align:left">Difference in household size</td><td>3.1112</td><td>2.9074</td></tr>
+## <tr><td style="text-align:left">Difference in round 1 winnings ('000 Pesos)</td><td>4.1820</td><td>3.2132</td></tr>
+## <tr><td style="text-align:left">Number who live in the municipal centre</td><td>0.7148</td><td>0.7805</td></tr>
+## <tr><td style="text-align:left">Number of females</td><td>1.7501</td><td>0.4816</td></tr>
+## <tr><td style="text-align:left">Sum of ages (years)</td><td>83.6733</td><td>16.0116</td></tr>
+## <tr><td style="text-align:left">Sum of education (years)</td><td>7.3521</td><td>4.5120</td></tr>
+## <tr><td style="text-align:left">Number married</td><td>1.5503</td><td>0.5919</td></tr>
+## <tr><td style="text-align:left">Sum of household consumption ('000s Pesos/month)</td><td>850,188.2000</td><td>359,941.9000</td></tr>
+## <tr><td style="text-align:left">Sum of log household consumption per month</td><td>25.6207</td><td>0.8454</td></tr>
+## <tr><td style="text-align:left">Sum of household sizes</td><td>14.5676</td><td>4.5292</td></tr>
+## <tr><td style="text-align:left">Sum of round 1 winnings ('000s Pesos)</td><td>11.7083</td><td>5.4843</td></tr>
+## <tr><td colspan="3" style="border-bottom: 1px solid black"></td></tr></table>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(dplyr)}
+\NormalTok{Dyadic1 <-}\StringTok{ }\NormalTok{Dyadic }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{subset}\NormalTok{(inreg }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{)}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Observations =} \DecValTok{0}\NormalTok{)}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"samegroup"}\NormalTok{,}\StringTok{"difchoice1"}\NormalTok{,}\StringTok{"sumchoice1"}\NormalTok{,}\StringTok{"frfam"}\NormalTok{,}\StringTok{"friend2"}\NormalTok{,}\StringTok{"friendfamily"}\NormalTok{, }\StringTok{"family2"}\NormalTok{, }\StringTok{"friend1"}\NormalTok{, }\StringTok{"family1"}\NormalTok{,}\StringTok{"stranger"}\NormalTok{,}\StringTok{"frfamcl"}\NormalTok{, }\StringTok{"difurban"}\NormalTok{, }\StringTok{"diffemale"}\NormalTok{, }\StringTok{"difyage"}\NormalTok{, }\StringTok{"difysch"}\NormalTok{, }\StringTok{"difmarried"}\NormalTok{,}\StringTok{"diftcons"}\NormalTok{,}\StringTok{"difcons"}\NormalTok{, }\StringTok{"difhhsize"}\NormalTok{,}\StringTok{"difwin1"}\NormalTok{,}\StringTok{"sumurban"}\NormalTok{,}\StringTok{"sumfemale"}\NormalTok{,}\StringTok{"sumyage"}\NormalTok{, }\StringTok{"sumysch"}\NormalTok{, }\StringTok{"nummarried"}\NormalTok{, }\StringTok{"sumtcons"}\NormalTok{, }\StringTok{"sumcons"}\NormalTok{, }\StringTok{"sumhhsize"}\NormalTok{, }\StringTok{"sumwin1"}\NormalTok{,}\StringTok{"Observations"}\NormalTok{))}
+
+
+\NormalTok{Dyadic2 <-}\StringTok{ }\NormalTok{Dyadic }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{subset}\NormalTok{(inreg }\OperatorTok{==}\StringTok{ }\DecValTok{1} \OperatorTok{&}\StringTok{ }\NormalTok{frfamcl}\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{)}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Observations =} \DecValTok{0}\NormalTok{)}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"samegroup"}\NormalTok{,}\StringTok{"difchoice1"}\NormalTok{,}\StringTok{"sumchoice1"}\NormalTok{,}\StringTok{"frfam"}\NormalTok{,}\StringTok{"friend2"}\NormalTok{,}\StringTok{"friendfamily"}\NormalTok{, }\StringTok{"family2"}\NormalTok{, }\StringTok{"friend1"}\NormalTok{, }\StringTok{"family1"}\NormalTok{,}\StringTok{"stranger"}\NormalTok{,}\StringTok{"frfamcl"}\NormalTok{, }\StringTok{"difurban"}\NormalTok{, }\StringTok{"diffemale"}\NormalTok{, }\StringTok{"difyage"}\NormalTok{, }\StringTok{"difysch"}\NormalTok{, }\StringTok{"difmarried"}\NormalTok{,}\StringTok{"diftcons"}\NormalTok{,}\StringTok{"difcons"}\NormalTok{, }\StringTok{"difhhsize"}\NormalTok{,}\StringTok{"difwin1"}\NormalTok{,}\StringTok{"sumurban"}\NormalTok{,}\StringTok{"sumfemale"}\NormalTok{,}\StringTok{"sumyage"}\NormalTok{, }\StringTok{"sumysch"}\NormalTok{, }\StringTok{"nummarried"}\NormalTok{, }\StringTok{"sumtcons"}\NormalTok{, }\StringTok{"sumcons"}\NormalTok{, }\StringTok{"sumhhsize"}\NormalTok{, }\StringTok{"sumwin1"}\NormalTok{,}\StringTok{"Observations"}\NormalTok{))}
+
+\NormalTok{Dyadic3 <-}\StringTok{ }\NormalTok{Dyadic }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{subset}\NormalTok{(inreg }\OperatorTok{==}\StringTok{ }\DecValTok{1} \OperatorTok{&}\StringTok{ }\NormalTok{frfamcl}\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Observations =} \DecValTok{0}\NormalTok{)}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"samegroup"}\NormalTok{,}\StringTok{"difchoice1"}\NormalTok{,}\StringTok{"sumchoice1"}\NormalTok{,}\StringTok{"frfam"}\NormalTok{,}\StringTok{"friend2"}\NormalTok{,}\StringTok{"friendfamily"}\NormalTok{, }\StringTok{"family2"}\NormalTok{, }\StringTok{"friend1"}\NormalTok{, }\StringTok{"family1"}\NormalTok{,}\StringTok{"stranger"}\NormalTok{,}\StringTok{"frfamcl"}\NormalTok{, }\StringTok{"difurban"}\NormalTok{, }\StringTok{"diffemale"}\NormalTok{, }\StringTok{"difyage"}\NormalTok{, }\StringTok{"difysch"}\NormalTok{, }\StringTok{"difmarried"}\NormalTok{,}\StringTok{"diftcons"}\NormalTok{,}\StringTok{"difcons"}\NormalTok{, }\StringTok{"difhhsize"}\NormalTok{,}\StringTok{"difwin1"}\NormalTok{,}\StringTok{"sumurban"}\NormalTok{,}\StringTok{"sumfemale"}\NormalTok{,}\StringTok{"sumyage"}\NormalTok{, }\StringTok{"sumysch"}\NormalTok{, }\StringTok{"nummarried"}\NormalTok{, }\StringTok{"sumtcons"}\NormalTok{, }\StringTok{"sumcons"}\NormalTok{, }\StringTok{"sumhhsize"}\NormalTok{, }\StringTok{"sumwin1"}\NormalTok{,}\StringTok{"Observations"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pervar<-}\KeywordTok{c}\NormalTok{(}\StringTok{"samegroup"}\NormalTok{,}\StringTok{"friend2"}\NormalTok{,}\StringTok{"friendfamily"}\NormalTok{,}\StringTok{"stranger"}\NormalTok{, }\StringTok{"frfam"}\NormalTok{,}\StringTok{"family2"}\NormalTok{, }\StringTok{"friend1"}\NormalTok{, }\StringTok{"family1"}\NormalTok{, }\StringTok{"difurban"}\NormalTok{,}\StringTok{"frfamcl"}\NormalTok{, }\StringTok{"diffemale"}\NormalTok{,}\StringTok{"difmarried"}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ pervar) \{}
+\NormalTok{Dyadic1[[i]] <-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(Dyadic1[[i]]))}\OperatorTok{*}\DecValTok{100}
+\NormalTok{\}}
+
+
+\NormalTok{pervar<-}\KeywordTok{c}\NormalTok{(}\StringTok{"samegroup"}\NormalTok{,}\StringTok{"friend2"}\NormalTok{,}\StringTok{"friendfamily"}\NormalTok{,}\StringTok{"stranger"}\NormalTok{, }\StringTok{"frfam"}\NormalTok{,}\StringTok{"family2"}\NormalTok{, }\StringTok{"friend1"}\NormalTok{, }\StringTok{"family1"}\NormalTok{, }\StringTok{"difurban"}\NormalTok{,}\StringTok{"frfamcl"}\NormalTok{, }\StringTok{"diffemale"}\NormalTok{,}\StringTok{"difmarried"}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ pervar) \{}
+\NormalTok{Dyadic2[[i]] <-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(Dyadic2[[i]]))}\OperatorTok{*}\DecValTok{100}
+\NormalTok{\}}
+
+\NormalTok{pervar<-}\KeywordTok{c}\NormalTok{(}\StringTok{"samegroup"}\NormalTok{,}\StringTok{"friend2"}\NormalTok{,}\StringTok{"friendfamily"}\NormalTok{,}\StringTok{"stranger"}\NormalTok{, }\StringTok{"frfam"}\NormalTok{,}\StringTok{"family2"}\NormalTok{, }\StringTok{"friend1"}\NormalTok{, }\StringTok{"family1"}\NormalTok{, }\StringTok{"difurban"}\NormalTok{,}\StringTok{"frfamcl"}\NormalTok{, }\StringTok{"diffemale"}\NormalTok{,}\StringTok{"difmarried"}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ pervar) \{}
+\NormalTok{Dyadic3[[i]] <-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(Dyadic3[[i]]))}\OperatorTok{*}\DecValTok{100}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(fBasics)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: timeDate
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: timeSeries
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sum1<-}\KeywordTok{basicStats}\NormalTok{(Dyadic1)[}\KeywordTok{c}\NormalTok{(}\StringTok{"Mean"}\NormalTok{, }\StringTok{"Stdev"}\NormalTok{),]}
+\NormalTok{sum1<-}\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{t}\NormalTok{(sum1))}
+\NormalTok{sum2<-}\KeywordTok{basicStats}\NormalTok{(Dyadic2)[}\KeywordTok{c}\NormalTok{(}\StringTok{"Mean"}\NormalTok{),]}
+\NormalTok{sum2<-}\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{t}\NormalTok{(sum2))}
+\NormalTok{sum3<-}\KeywordTok{basicStats}\NormalTok{(Dyadic3)[}\KeywordTok{c}\NormalTok{(}\StringTok{"Mean"}\NormalTok{),]}
+\NormalTok{sum3<-}\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{t}\NormalTok{(sum3))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{table4<-}\KeywordTok{cbind}\NormalTok{(sum1,sum2,sum3)}
+\NormalTok{table4[}\DecValTok{17}\NormalTok{,}\DecValTok{1}\NormalTok{]<-(table4[}\DecValTok{17}\NormalTok{,}\DecValTok{1}\NormalTok{])}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{table4[}\DecValTok{17}\NormalTok{,}\DecValTok{2}\NormalTok{]<-(table4[}\DecValTok{17}\NormalTok{,}\DecValTok{2}\NormalTok{])}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{table4[}\DecValTok{17}\NormalTok{,}\DecValTok{3}\NormalTok{]<-table4[}\DecValTok{17}\NormalTok{,}\DecValTok{3}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{table4[}\DecValTok{17}\NormalTok{,}\DecValTok{4}\NormalTok{]<-table4[}\DecValTok{17}\NormalTok{,}\DecValTok{4}\NormalTok{]}\OperatorTok{/}\DecValTok{1000} 
+\NormalTok{table4[}\DecValTok{26}\NormalTok{,}\DecValTok{1}\NormalTok{]<-table4[}\DecValTok{26}\NormalTok{,}\DecValTok{1}\NormalTok{]}\OperatorTok{/}\DecValTok{1000} 
+\NormalTok{table4[}\DecValTok{26}\NormalTok{,}\DecValTok{2}\NormalTok{]<-table4[}\DecValTok{26}\NormalTok{,}\DecValTok{2}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{table4[}\DecValTok{26}\NormalTok{,}\DecValTok{3}\NormalTok{]<-table4[}\DecValTok{26}\NormalTok{,}\DecValTok{3}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{table4[}\DecValTok{26}\NormalTok{,}\DecValTok{4}\NormalTok{]<-table4[}\DecValTok{26}\NormalTok{,}\DecValTok{4}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+
+\NormalTok{is.num <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(table4, is.numeric)}
+\NormalTok{table4[is.num] <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(table4[is.num], round, }\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#table4<-as.data.frame(lapply(table4, na.omit))}
+\CommentTok{# table4<-transform(table4, Mean = as.numeric(Mean))}
+\CommentTok{# table4<-transform(table4, Mean = as.numeric(Mean), Mean.1 = as.numeric(Mean.1), Mean.2 = as.numeric(Mean.2))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{table4[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(table4[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{table4[}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(table4[}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{],}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{table4[}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(table4[}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{],}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{table4[}\DecValTok{4}\OperatorTok{:}\DecValTok{13}\NormalTok{,}\DecValTok{1}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(table4[}\DecValTok{4}\OperatorTok{:}\DecValTok{13}\NormalTok{,}\DecValTok{1}\NormalTok{],}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{table4[}\DecValTok{4}\OperatorTok{:}\DecValTok{13}\NormalTok{,}\DecValTok{3}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(table4[}\DecValTok{4}\OperatorTok{:}\DecValTok{13}\NormalTok{,}\DecValTok{3}\NormalTok{],}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{table4[}\DecValTok{4}\OperatorTok{:}\DecValTok{13}\NormalTok{,}\DecValTok{4}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(table4[}\DecValTok{4}\OperatorTok{:}\DecValTok{13}\NormalTok{,}\DecValTok{4}\NormalTok{],}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{table4[}\DecValTok{16}\NormalTok{,}\DecValTok{1}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(table4[}\DecValTok{16}\NormalTok{,}\DecValTok{1}\NormalTok{],}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{table4[}\DecValTok{16}\NormalTok{,}\DecValTok{3}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(table4[}\DecValTok{16}\NormalTok{,}\DecValTok{3}\NormalTok{],}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{table4[}\DecValTok{16}\NormalTok{,}\DecValTok{4}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(table4[}\DecValTok{16}\NormalTok{,}\DecValTok{4}\NormalTok{],}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{table4[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
+\NormalTok{table4[}\DecValTok{4}\OperatorTok{:}\DecValTok{13}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
+\NormalTok{table4[}\DecValTok{16}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{table4[}\DecValTok{30}\NormalTok{,]<-}\KeywordTok{c}\NormalTok{(}\StringTok{"86518"}\NormalTok{,}\StringTok{" "}\NormalTok{,}\StringTok{"4466"}\NormalTok{,}\StringTok{"82052"}\NormalTok{)}
+
+\NormalTok{is.num <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(table4, is.numeric)}
+\NormalTok{table4[is.num] <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(table4[is.num], round, }\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#position = "float_right" }
+\KeywordTok{library}\NormalTok{(kableExtra)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'kableExtra'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     group_rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(params)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: whisker
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'params'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:kableExtra':
+## 
+##     kable
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(knitr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'knitr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:params':
+## 
+##     kable
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{(table4,}\DataTypeTok{format =} \StringTok{"latex"}\NormalTok{,}\DataTypeTok{row.names =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{col.names =} \KeywordTok{c}\NormalTok{(}\StringTok{"Mean/Prop"}\NormalTok{,}\StringTok{"s.d."}\NormalTok{,}\StringTok{"Mean/Prop"}\NormalTok{,}\StringTok{"s.d."}\NormalTok{), }\DataTypeTok{align =} \StringTok{'l'}\NormalTok{,}\DataTypeTok{escape =}\NormalTok{ F,}\DataTypeTok{booktabs =}\NormalTok{ F)}\OperatorTok{%>%}
+\StringTok{ }\KeywordTok{add_header_above}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{" "}\NormalTok{ =}\StringTok{ }\DecValTok{1}\NormalTok{, }\StringTok{"All dyads"}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{,}\StringTok{"Close family and friends"}\NormalTok{ =}\StringTok{ }\DecValTok{1}\NormalTok{, }\StringTok{"Other dyads"}\NormalTok{ =}\DecValTok{1}\NormalTok{))}\OperatorTok{%>%}\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{bootstrap_options =} \KeywordTok{c}\NormalTok{(}\StringTok{"striped"}\NormalTok{), }\DataTypeTok{full_width =}\NormalTok{ F, }\DataTypeTok{font_size =} \DecValTok{16}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{column_spec}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DataTypeTok{border_right =}\NormalTok{ T)}\OperatorTok{%>%}\KeywordTok{column_spec}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DataTypeTok{italic =}\NormalTok{ T)}\OperatorTok{%>%}\KeywordTok{add_header_above}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Table4: Experimental data"}\NormalTok{=}\DecValTok{5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\centering\begingroup\fontsize{16}{18}\selectfont
+
+\begin{tabular}{>{}l||>{\em}l|l|l|l}
+\hline
+\multicolumn{5}{c|}{Table4: Experimental data} \\
+\cline{1-5}
+\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{All dyads} & \multicolumn{1}{c|}{Close family and friends} & \multicolumn{1}{c}{Other dyads} \\
+\cline{2-3} \cline{4-4} \cline{5-5}
+  & Mean/Prop & s.d. & Mean/Prop & s.d.\\
+\hline
+samegroup & 9.21% &  & 29.467% & 8.107%\\
+\hline
+difchoice1 & 1.639 & 1.265 & 1.682 & 1.637\\
+\hline
+sumchoice1 & 7.179 & 2.123 & 7.056 & 7.186\\
+\hline
+frfam & 10.49% &  & 100% & 5.618%\\
+\hline
+friend2 & 2.427% &  & 29.019% & 0.98%\\
+\hline
+friendfamily & 0.176% &  & 2.015% & 0.076%\\
+\hline
+family2 & 0.453% &  & 5.464% & 0.18%\\
+\hline
+friend1 & 6.9% &  & 57.77% & 4.132%\\
+\hline
+family1 & 0.534% &  & 5.732% & 0.251%\\
+\hline
+stranger & 89.51% &  & 0% & 94.382%\\
+\hline
+frfamcl & 5.162% &  & 100% & 0%\\
+\hline
+difurban & 30.951% &  & 0% & 32.635%\\
+\hline
+diffemale & 20.537% &  & 16.57% & 20.753%\\
+\hline
+difyage & 12.404 & 9.682 & 11.481 & 12.454\\
+\hline
+difysch & 3.235 & 2.77 & 2.633 & 3.267\\
+\hline
+difmarried & 34.684% &  & 30.721% & 34.9%\\
+\hline
+diftcons & 232.84 & 227.244 & 226.585 & 233.181\\
+\hline
+difcons & 0.589 & 0.489 & 0.583 & 0.59\\
+\hline
+difhhsize & 3.111 & 2.907 & 2.803 & 3.128\\
+\hline
+difwin1 & 4.182 & 3.213 & 4.079 & 4.188\\
+\hline
+sumurban & 0.715 & 0.78 & 1.161 & 0.691\\
+\hline
+sumfemale & 1.75 & 0.482 & 1.765 & 1.749\\
+\hline
+sumyage & 83.673 & 16.012 & 84.456 & 83.631\\
+\hline
+sumysch & 7.352 & 4.512 & 6.71 & 7.387\\
+\hline
+nummarried & 1.55 & 0.592 & 1.595 & 1.548\\
+\hline
+sumtcons & 850.188 & 359.942 & 850.359 & 850.179\\
+\hline
+sumcons & 25.621 & 0.845 & 25.601 & 25.622\\
+\hline
+sumhhsize & 14.568 & 4.529 & 14.114 & 14.592\\
+\hline
+sumwin1 & 11.708 & 5.484 & 11.524 & 11.718\\
+\hline
+Observations & 86518 &  & 4466 & 82052\\
+\hline
+\end{tabular}
+\endgroup{}
+\end{table}
+
+
+\end{document}

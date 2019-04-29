@@ -1,0 +1,33 @@
+---
+title: "Table2"
+author: "Jocelyn Hu"
+date: "April 28, 2019"
+output: pdf_document
+---
+
+```{r, include = FALSE}
+options(tinytex.verbose = TRUE)
+```
+
+```{r, include = FALSE}
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(mosaic)
+```
+
+```{r}
+table2<- data.frame(GambleChoice = c("Gamble1", "Gamble2", "Gamble3", "Gamble4", "Gamble5", "Gamble6"),Low = c(3000,2700,2400,1800,1000,0), high = c(3000,5700,7200,9000,11000,12000),exp=c(3000,4200,4800,5400,6000,6000),sd=c(0,2121,3394,5091,7071,8485),riskcalss = c("Extreme","Severe","Intermediate","Moderate","Slight-neutral","Neutral-negative"),crra = c("infinity to 7.49","7.49 to 1.73","1.73 to 0.81","0.81 to 0.46","0.47 to 0.00","0 to -ve infinity"))
+```
+
+```{r, result = 'asis'}
+library(kableExtra)
+library(params)
+library(knitr)
+library(pander)
+#pander(table2, split.cells = 20, split.table = Inf)
+knitr::kable(table2,format = "latex",  row.names = NA, col.names = c("Gamble Choice","Low payoff(yellow)","High payoff(blue)","Expected value","Standard Deviation","Risk aversion class","CRRA range"), align = 'l',escape = F,booktabs = T,caption = "Gamble choices", longtable = T )%>%kable_styling(latex_options = c("striped", "hold_position"),position = "center", full_width = F, font_size = 6)
+
+```
+

@@ -1,0 +1,76 @@
+---
+title: "results reproduction"
+output: html_document
+author: "Jocelyn Hu"
+---
+```{r}
+library(tidyverse)
+library(yardstick)
+library(ggplot2)
+library(mosaic)
+library(stargazer)
+require(Stat2Data)
+library(scales)
+library(readr)
+library(rms)
+library(pastecs)
+library(tidyr)
+```
+
+```{r}
+library(haven)
+Dyadic_1<- read.csv("Dyadic.csv") 
+
+tab1<-Dyadic%>%
+  filter(inreg == 1 & frfamcl == 1)
+
+tab2<- Dyadic%>%
+  filter(inreg == 1 & frfamcl == 0)
+```
+
+```{r}
+library(gmodels)
+tab11<- as.data.frame(with(tab1, CrossTable(difchoice1, samegroup, missing.include=TRUE,prop.c = FALSE,prop.chisq = FALSE, chisq = FALSE, prop.t = FALSE)))
+
+
+```
+
+```{r}
+green<-tab11%>%
+  filter(prop.col.y == 1)%>%
+  select(prop.row.Freq, prop.row.x)%>%
+  mutate(type = "Geog. prox. family& friends (4,466)")
+```
+
+
+
+```{r table 3 stata}
+
+tab12<- as.data.frame(with(tab2, CrossTable(difchoice1, samegroup, missing.include=TRUE,prop.c = FALSE,prop.chisq = FALSE, chisq = FALSE, prop.t = FALSE)))
+
+
+```
+
+```{r}
+red<-tab12%>%
+  filter(prop.col.y == 1)%>%
+  select(prop.row.Freq, prop.row.x)%>%
+  mutate(type = "Other (82,052)")
+```
+
+```{r}
+library(plyr)
+table2<-rbind(green,red)
+```
+
+
+```{r}
+library(ggplot2)
+library(RColorBrewer)
+cbPalette <- c("#009E73", "#D55E00", "#CC79A7")
+ggplot(table2,aes(x=prop.row.x, y = prop.row.Freq*100, fill = type)) +
+  geom_bar(stat="identity",colour="black",position="dodge") + ggtitle("Figure 1: Assortative match with respect to risk attitudes by different types of dyad")+ xlab("Difference in round 1 gamble choice")+  ylab("Select into same group (%)")+scale_fill_manual(values=cbPalette)+theme(legend.position="top",panel.background = element_rect(fill='white', colour='white'))
+
+
+```
+

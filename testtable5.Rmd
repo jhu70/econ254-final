@@ -207,11 +207,6 @@ table5<-table5[with(table5,order(table5[["1"]],table5[["5"]])), ]%>%
 ```
 
 ```{r}
-is.num <- sapply(table5, is.numeric)
-table5[is.num] <- lapply(table5[is.num], round, 3)
-```
-
-```{r}
 table5<- sapply(table5, as.character)
 table5[is.na(table5)] <- " "
 
@@ -238,7 +233,7 @@ rownames(table5_2) <- NULL
 
 ```{r}
 is.num <- sapply(c5m, is.numeric)
-c5m[is.num] <- lapply(c5m[is.num], round, 3)
+c5m[is.num] <- lapply(c5m[is.num], round, 5)
 table5_2[17,5]<-c5m[1,1]
 table5_2[17,1]<-"Max no. of close friends and family options"
 table5_2[18,5]<-"(0.003)"
@@ -250,13 +245,12 @@ table5_2[is.na(table5_2)] <- " "
 ```
 
 
-
 ```{r, result = 'asis'}
 #position = "float_right" 
 library(kableExtra)
 library(params)
 library(knitr)
-table5_print<-knitr::kable(table5_2,format = "html", row.names = NA,align = 'c',escape = F,booktabs = T, col.names = c("","1","2","3","4","5"))%>%add_header_above(c(" " = 1, "All dyads" = 2,"Close friends and family" = 1, "Other dyads" = 2))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size = 16)%>%add_header_above(c("Table 5: Dyadic analysis of assortative matching on risk attitudes"=6))%>% add_footnote("Notes: Marginal effects reported. Corresponding standard errors (in parentheses) adjusted to account for non-independence within municipalities by clustering; *** - sig. at 1% level; ** - sig. at 5% level; * - sig. at 10% level. # - 4 additional municipalities were dropped from this regression because, in one, all of the dyads joined the same group and, in three, none of the dyads joined the same group; ## - Controls included: One lives in municipal centre, one not, Different genders, Difference in age, Difference in years of schooling, Difference in marital status, Difference in log household consumption, Difference in household size, Difference in round 1 winnings, Sum of gamble choices,
+table5_print<-knitr::kable(table5_2,format = "latex", row.names = NA,align = 'c',escape = F,booktabs = T, col.names = c("","1","2","3","4","5"))%>%add_header_above(c(" " = 1, "All dyads" = 2,"Close friends and family" = 1, "Other dyads" = 2))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size = 16)%>%add_header_above(c("Table 5: Dyadic analysis of assortative matching on risk attitudes"=6))%>% add_footnote("Notes: Marginal effects reported. Corresponding standard errors (in parentheses) adjusted to account for non-independence within municipalities by clustering; *** - sig. at 1% level; ** - sig. at 5% level; * - sig. at 10% level. # - 4 additional municipalities were dropped from this regression because, in one, all of the dyads joined the same group and, in three, none of the dyads joined the same group; ## - Controls included: One lives in municipal centre, one not, Different genders, Difference in age, Difference in years of schooling, Difference in marital status, Difference in log household consumption, Difference in household size, Difference in round 1 winnings, Sum of gamble choices,
 Number who live in municipal centre, Number of females, Sum of ages, Sum of years of schooling, Number who are married (not to each other), Sum log household consumption, Sum of household sizes, Sum of round 1 winnings.", notation="alphabet")
 
 print(table5_print)
