@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.4.4)  28 APR 2019 23:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.4.4)  29 APR 2019 05:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -879,6 +879,18 @@ Package xcolor Warning: Incompatible color definition on input line 148.
 
 
 Package xcolor Warning: Incompatible color definition on input line 148.
+
+
+Overfull \hbox (160.24315pt too wide) in paragraph at lines 152--152
+[]\T1/lmtt/m/n/10 ## -- Attaching packages ------------------------------------
+---------------------------------------- tidyverse 1.2.1 --[] 
+ []
+
+
+Overfull \hbox (160.24315pt too wide) in paragraph at lines 165--165
+[]\T1/lmtt/m/n/10 ## -- Conflicts ---------------------------------------------
+---------------------------------- tidyverse_conflicts() --[] 
+ []
 
 
 Package xcolor Warning: Incompatible color definition on input line 167.

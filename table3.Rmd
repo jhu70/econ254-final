@@ -1,7 +1,10 @@
 ---
 title: "results reproduction"
-output: pdf_document
 author: "Jocelyn Hu"
+output: 
+  tint::tintPdf:
+    latex_engine: xelatex
+
 ---
 
 ```{r, include = FALSE}

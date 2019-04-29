@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.4.4)  29 APR 2019 05:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.4.4)  29 APR 2019 05:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**table3.tex
-(./table3.tex
+**test.tex
+(./test.tex
 LaTeX2e <2018-12-01>
 
 (c:/Users/jocel/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tufte-latex/tufte-
@@ -361,7 +361,7 @@ LaTeX Info: Redefining \cite on input line 694.
 y
 Package: bibentry 2007/10/30 1.5 (PWD)
 )
-No file table3.bbl.
+No file test.bbl.
 \c@@tufte@num@bibkeys=\count110
 
 (c:/Users/jocel/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/sauerj/optparams.s
@@ -811,8 +811,8 @@ LaTeX Info: Redefining \ttfamily on input line 94.
 LaTeX Info: Redefining \oldstylenums on input line 189.
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 124.
-(./table3.aux)
-\openout1 = `table3.aux'.
+(./test.aux)
+\openout1 = `test.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 246.
 LaTeX Font Info:    ... okay on input line 246.
@@ -863,9 +863,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 246.
 LaTeX Info: Redefining \pageref on input line 246.
 LaTeX Info: Redefining \nameref on input line 246.
-(./table3.out) (./table3.out)
+(./test.out) (./test.out)
 \@outlinefile=\write4
-\openout4 = `table3.out'.
+\openout4 = `test.out'.
 
 ABD: EverySelectfont initializing macros
 LaTeX Info: Redefining \selectfont on input line 246.
@@ -1007,158 +1007,212 @@ Overfull \hbox (71.15643pt too wide) in paragraph at lines 423--423
 ge=stargazer[] 
  []
 
-[3] [4] [5] [6] [7] [8] [9] [10] [11] [12]
-Overfull \hbox (197.12567pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <table style="text-align:center"><caption><strong>Table3: 
-Experimental data</strong></caption>[] 
+[3] [4]
+LaTeX Font Info:    Try loading font information for U+msa on input line 600.
+(c:/Users/jocel/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 600.
+(c:/Users/jocel/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [5]
+Overfull \hbox (191.87695pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <table style="text-align:center"><caption><strong>Table4: 
+Dyadic Variables</strong></caption>[] 
  []
 
 
-Overfull \hbox (1021.17444pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td colspan="7" style="border-bottom: 1px solid black"
-></td></tr><tr><td style="text-align:left"></td><td></td><td></td><td>Mean/Prop
-(Full Sample)</td><td>s.d.(Full Sample)</td><td>Mean/Prop(Sample Analysed)</td>
-<td>s.d.(Sample Analysed)</td></tr>[] 
+Overfull \hbox (491.0539pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td colspan="3" style="border-bottom: 1px solid black"
+></td></tr><tr><td style="text-align:left">Statistic</td><td>Mean</td><td>St. D
+ev.</td></tr>[] 
  []
 
 
-Overfull \hbox (711.50006pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td colspan="7" style="border-bottom: 1px solid black"
-></td></tr><tr><td style="text-align:left">1</td><td>Gamble 1(safe)</td><td></t
-d><td>8.739%</td><td></td><td>8.746%</td><td></td></tr>[] 
+Overfull \hbox (611.77441pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td colspan="3" style="border-bottom: 1px solid black"
+></td></tr><tr><td style="text-align:left">Joined same group in round 2(%)</td>
+<td>9.2096</td><td>28.9164</td></tr>[] 
  []
 
 
-Overfull \hbox (328.34363pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">2</td><td>Gamble 2</td><td
-></td><td>17.757%</td><td></td><td>17.665%</td><td></td></tr>[] 
+Overfull \hbox (265.35901pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Difference in gamble choic
+e(round1)</td><td>1.6391</td><td>1.2648</td></tr>[] 
  []
 
 
-Overfull \hbox (328.34363pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">3</td><td>Gamble 3</td><td
-></td><td>18.196%</td><td></td><td>18.311%</td><td></td></tr>[] 
+Overfull \hbox (244.36414pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Sum of gamble choices (rou
+nd 1)</td><td>7.1789</td><td>2.1228</td></tr>[] 
  []
 
 
-Overfull \hbox (323.09491pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">4</td><td>Gamble 4</td><td
-></td><td>29.29%</td><td></td><td>29.168%</td><td></td></tr>[] 
+Overfull \hbox (443.81543pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Friends and family: One or
+ both recognized friendship or kinship(%)</td><td>10.4903</td><td>30.6430</td><
+/tr>[] 
  []
 
 
-Overfull \hbox (328.34363pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">5</td><td>Gamble 5</td><td
-></td><td>11.253%</td><td></td><td>11.116%</td><td></td></tr>[] 
+Overfull \hbox (239.11542pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Both recognized friendship
+(%)</td><td>2.4272</td><td>15.3895</td></tr>[] 
  []
 
 
-Overfull \hbox (380.83081pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">6</td><td>Gamble 6(riskies
-t)</td><td></td><td>14.765%</td><td></td><td>14.994%</td><td></td></tr>[] 
+Overfull \hbox (218.12054pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Both recognized kinship(%)
+</td><td>0.1757</td><td>4.1878</td></tr>[] 
  []
 
 
-Overfull \hbox (386.07953pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">7</td><td>Won gamble in 1s
-t round</td><td></td><td>54.7%</td><td></td><td>54.5%</td><td></td></tr>[] 
+Overfull \hbox (307.34875pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">One recognized friendship,
+ other kinship(%)</td><td>0.4531</td><td>6.7159</td></tr>[] 
  []
 
 
-Overfull \hbox (475.30774pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">8</td><td>Winings 1st roun
-d ('000 Pesos)</td><td></td><td>5.842</td><td>3.832</td><td>5.835</td><td>3.838
-</td></tr>[] 
+Overfull \hbox (233.8667pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">One recognized friendship(
+%)</td><td>6.9003</td><td>25.3461</td></tr>[] 
  []
 
 
-Overfull \hbox (338.84106pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">9</td><td>Joined a group</
-td><td></td><td>86.2%</td><td></td><td>86.9%</td><td></td></tr>[] 
+Overfull \hbox (212.87183pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">One recognized kinship(%)<
+/td><td>0.5340</td><td>7.2880</td></tr>[] 
  []
 
 
-Overfull \hbox (459.56158pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">10</td><td>Number of co-gr
-oup members</td><td></td><td>4.195</td><td>5.776</td><td>3.687</td><td>3.899</t
-d></tr>[] 
+Overfull \hbox (149.8872pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Stranger(%)</td><td>89.509
+7</td><td>30.6430</td></tr>[] 
  []
 
 
-Overfull \hbox (354.58722pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">11</td><td>Gamble 1(safe)<
-/td><td></td><td>6.028%</td><td></td><td>5.991%</td><td></td></tr>[] 
+Overfull \hbox (328.34363pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Geographically proximate f
+riends and family(%)</td><td>5.1619</td><td>22.1259</td></tr>[] 
  []
 
 
-Overfull \hbox (333.59235pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">12</td><td>Gamble 2</td><t
-d></td><td>12.854%</td><td></td><td>12.759%</td><td></td></tr>[] 
+Overfull \hbox (328.34363pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">One lives in the municipal
+ centre, one not(%)</td><td>30.9508</td><td>46.2293</td></tr>[] 
  []
 
 
-Overfull \hbox (333.59235pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">13</td><td>Gamble 3</td><t
-d></td><td>17.685%</td><td></td><td>17.759%</td><td></td></tr>[] 
+Overfull \hbox (197.12567pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Different genders(%)</td><
+td>20.5368</td><td>40.3972</td></tr>[] 
  []
 
 
-Overfull \hbox (328.34363pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">14</td><td>Gamble 4</td><t
-d></td><td>28.942%</td><td></td><td>28.75%</td><td></td></tr>[] 
+Overfull \hbox (212.87183pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Difference in age(years)</
+td><td>12.4041</td><td>9.6816</td></tr>[] 
  []
 
 
-Overfull \hbox (333.59235pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">15</td><td>Gamble 5</td><t
-d></td><td>17.206%</td><td></td><td>17.328%</td><td></td></tr>[] 
+Overfull \hbox (244.36414pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Difference in education (y
+ears)</td><td>3.2346</td><td>2.7703</td></tr>[] 
  []
 
 
-Overfull \hbox (386.07953pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">16</td><td>Gamble 6(riskie
-st)</td><td></td><td>17.285%</td><td></td><td>17.414%</td><td></td></tr>[] 
+Overfull \hbox (254.86157pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Difference in marital stat
+us(%)</td><td>34.6841</td><td>47.5967</td></tr>[] 
  []
 
 
-Overfull \hbox (391.32825pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">17</td><td>Won gamble in 2
-nd round</td><td></td><td>57.7%</td><td></td><td>57.7%</td><td></td></tr>[] 
+Overfull \hbox (433.318pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Difference in household co
+nsumption ('000s Pesos/month)</td><td>232,840.3000</td><td>227,243.5000</td></t
+r>[] 
  []
 
 
-Overfull \hbox (391.32825pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">18</td><td>Reneged having 
-won gamble</td><td></td><td>6.3%</td><td></td><td>6.4%</td><td></td></tr>[] 
+Overfull \hbox (338.84106pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Difference in log househol
+d consumption per month</td><td>0.5894</td><td>0.4892</td></tr>[] 
  []
 
 
-Overfull \hbox (396.57697pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">19</td><td>Reneged having 
-lost gamble</td><td></td><td>1.8%</td><td></td><td>1.8%</td><td></td></tr>[] 
+Overfull \hbox (228.61798pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Difference in household si
+ze</td><td>3.1112</td><td>2.9074</td></tr>[] 
  []
 
 
-Overfull \hbox (485.80518pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">20</td><td>Winnings 2nd ro
-und ('000 Pesos)</td><td></td><td>6.134</td><td>4.046</td><td>6.133</td><td>4.0
-52</td></tr>[] 
+Overfull \hbox (307.34875pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Difference in round 1 winn
+ings ('000 Pesos)</td><td>4.1820</td><td>3.2132</td></tr>[] 
  []
 
 
-Overfull \hbox (323.09491pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">21</td><td>Observations</t
-d><td></td><td>2506</td><td></td><td>2321</td><td></td></tr>[] 
+Overfull \hbox (286.35388pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Number who live in the mun
+icipal centre</td><td>0.7148</td><td>0.7805</td></tr>[] 
  []
 
 
-Overfull \hbox (107.89746pt too wide) in paragraph at lines 1048--1048
-[]\T1/cmtt/m/n/10 ## <tr><td colspan="7" style="border-bottom: 1px solid black"
+Overfull \hbox (170.88208pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Number of females</td><td>
+1.7501</td><td>0.4816</td></tr>[] 
+ []
+
+
+Overfull \hbox (191.87695pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Sum of ages (years)</td><t
+d>83.6733</td><td>16.0116</td></tr>[] 
+ []
+
+
+Overfull \hbox (207.62311pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Sum of education (years)</
+td><td>7.3521</td><td>4.5120</td></tr>[] 
+ []
+
+
+Overfull \hbox (155.13593pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Number married</td><td>1.5
+503</td><td>0.5919</td></tr>[] 
+ []
+
+
+Overfull \hbox (396.57697pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Sum of household consumpti
+on ('000s Pesos/month)</td><td>850,188.2000</td><td>359,941.9000</td></tr>[] 
+ []
+
+
+Overfull \hbox (307.34875pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Sum of log household consu
+mption per month</td><td>25.6207</td><td>0.8454</td></tr>[] 
+ []
+
+
+Overfull \hbox (202.37439pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Sum of household sizes</td
+><td>14.5676</td><td>4.5292</td></tr>[] 
+ []
+
+
+Overfull \hbox (281.10516pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td style="text-align:left">Sum of round 1 winnings ('
+000s Pesos)</td><td>11.7083</td><td>5.4843</td></tr>[] 
+ []
+
+
+Overfull \hbox (107.89746pt too wide) in paragraph at lines 673--673
+[]\T1/cmtt/m/n/10 ## <tr><td colspan="3" style="border-bottom: 1px solid black"
 ></td></tr></table>[] 
  []
 
-[13]
-Overfull \hbox (2.9231pt too wide) in paragraph at lines 1079--1079
+[6] [7] [8] [9]
+Overfull \hbox (2.9231pt too wide) in paragraph at lines 875--875
 []\T1/cmtt/m/n/10 ## The following object is masked from 'package:kableExtra':[
 ] 
  []
@@ -1170,15 +1224,15 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1120 \begin{table}[H]
-                        
+l.908 \begin{table}[H]
+                       
 Here is how much of TeX's memory you used:
- 13605 strings out of 494562
- 198639 string characters out of 6176065
- 296812 words of memory out of 5000000
- 17015 multiletter control sequences out of 15000+600000
- 40779 words of font info for 30 fonts, out of 8000000 for 9000
+ 13628 strings out of 494562
+ 199124 string characters out of 6176065
+ 295812 words of memory out of 5000000
+ 17029 multiletter control sequences out of 15000+600000
+ 42478 words of font info for 38 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 40i,11n,45p,401b,497s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 40i,11n,45p,354b,497s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 !  ==> Fatal error occurred, no output PDF file produced!

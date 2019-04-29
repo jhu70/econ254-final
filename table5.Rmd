@@ -154,7 +154,7 @@ c5_m<-margins(c5,data = find_data(c5, parent.frame()),variables = c("difchoice1"
 
 
 
-```{r}
+```{r, eval= FALSE}
 library(stargazer)
 stargazer(c1,c2,c3,c4,c5,type = "html", column.labels = c("1","2","3","4","5"), column.separate = NULL,dep.var.labels= "Same group",title=" Logit Regression of: Dyadic analysis of assortative mathcing on rosk attitudes Results",align=TRUE, out="table5_models.htm",omit.stat=c("LL","ser","f"),ci=FALSE, ci.level=0.90,no.space=TRUE)
 
@@ -264,14 +264,7 @@ print(table5_print)
 ```
 
 
-Plot marginal effects:
 
-```{r}
-#Using the plot() method yields an aesthetically similar result to Stata's marginsplot:
-
-plot(c2_m)
-
-```
 
 
 ```{r}

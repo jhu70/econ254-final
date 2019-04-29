@@ -1,0 +1,89 @@
+---
+title: "tableA1"
+author: "Jocelyn Hu"
+date: "April 29, 2019"
+output: pdf_document
+---
+
+```{r, include = FALSE}
+options(tinytex.verbose = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(yardstick)
+library(ggplot2)
+library(mosaic)
+library(stargazer)
+require(Stat2Data)
+library(scales)
+library(readr)
+library(rms)
+library(pastecs)
+library(tidyr)
+library(stats)
+```
+
+
+```{r}
+# 
+# grpffc<-read.csv("Dyadic.csv")%>%
+#   mutate(idgroup = ifelse(samegroup==1,grpid, NA))%>%
+#   group_by(idgroup)%>%
+#   mutate(grpFFcl = ifelse(samegroup==0, NA, mean(frfamcl)))
+# 
+# grpffc<-aggregate(grpFFcl~idgroup,grpffc,mean,na.action = na.omit)
+```
+
+```{r}
+library(haven)
+vector<- read.csv("Data/tablea1_edit.csv")
+grp<-read_dta("Data/grpFFcl.dta")
+```
+
+```{r}
+# 
+# vector<-merge(vector,grpffc, by = "idgroup", all.x=TRUE)
+tablea1<-merge(vector,grp,by = "idgroup")
+glimpse(tablea1)
+```
+
+
+
+
+```{r}
+library(miceadds)
+model_formula1 <- as.formula(pdefault ~  grpFFcl.y+grpmem+gch2+gfem+gage+gurb+gysch+gmar+glcons+ghhsz+factor(municode))
+tablea1_1<-tablea1%>%
+  filter(grpmem<=3)
+
+col1<-lm(model_formula1,data =tablea1_1)
+summary(col1)
+
+
+model_formula2 <- as.formula(pdefault ~grpFFcl.y+grpmem+gch2+gfem+gage+gurb+gysch+gmar+glcons+ghhsz+factor(municode))
+
+col2<-lm(data =tablea1,model_formula2)
+summary(col2)
+
+tablea1<-tablea1%>%
+  mutate(ffclmem=grpFFcl.y*grpmem)
+model_formula3 <- as.formula(pdefault ~  grpFFcl.y+grpmem+ffclmem+gch2+gfem+gage+gurb+gysch+gmar+glcons+ghhsz+factor(municode))
+
+col3<-lm(data =tablea1,model_formula3)
+summary(col3)
+
+
+
+model_formula_var <- as.formula(pdefault ~  grpFFcl.y+grpmem+ffclmem+gch2+gfem+gage+gurb+gysch+gmar+glcons+ghhsz)
+
+col_var<-lm(model_formula_var,data =tablea1_1)
+summary(col_var)
+```
+
+```{r, result = 'asis'}
+library(stargazer)
+stargazer(col1,col2,col3,type = "html", column.labels = c("Groups of 2 or 3","All groups"), column.separate = c(1,2),title="Table A1: Group-level analysis of defections: Dependent variable = proportion of members that default",align=TRUE,covariate.labels=c("[1] Density of close friends and amily network within group","[2] Number of group members","[1] x [2]","Average gamble choice","Proportion of females","Average age","Proportion living in municipal centre","Average years of education","Proportion married","Average log household consumption","Average household size","Constant"),omit.stat=c("LL","ser","f"),ci=FALSE, ci.level=0.90,no.space=TRUE,keep = c("grpFFcl.y","grpmem","ffclmem","gch2","gfem","gage","gurb","gysch","gmar","glcons","ghhsz","(Intercept)"),colnames = FALSE,object.names = FALSE, out = "tablea1.htm",notes = " Linear regression coefficients reported. Standard errors (in parentheses) adjusted to account of non-independence within municipalities by clustering",notes.align = "l",notes.append = TRUE, add.lines =list(c("Municipality dummies","no","no","yes")),rownames = FALSE,intercept.bottom = TRUE, keep.stat = c("n"),dep.var.labels = "Proportion of members that default", star.char = NULL,column.sep.width = "0.3pt", font.size = "scriptsize")
+```
+
+out

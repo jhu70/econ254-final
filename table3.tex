@@ -1,34 +1,50 @@
-\documentclass[]{article}
-\usepackage{lmodern}
+\documentclass[]{tufte-handout}
+
+% ams
 \usepackage{amssymb,amsmath}
+
 \usepackage{ifxetex,ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
 \else % if luatex or xelatex
-  \ifxetex
-    \usepackage{mathspec}
-  \else
-    \usepackage{fontspec}
-  \fi
+  \makeatletter
+  \@ifpackageloaded{fontspec}{}{\usepackage{fontspec}}
+  \makeatother
   \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \makeatletter
+  \@ifpackageloaded{soul}{
+     \renewcommand\allcapsspacing[1]{{\addfontfeature{LetterSpace=15}#1}}
+     \renewcommand\smallcapsspacing[1]{{\addfontfeature{LetterSpace=10}#1}}
+   }{}
+  \makeatother
 \fi
-% use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% use microtype if available
-\IfFileExists{microtype.sty}{%
-\usepackage{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-}{}
-\usepackage[margin=1in]{geometry}
+
+% graphix
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+
+% booktabs
+\usepackage{booktabs}
+
+% url
+\usepackage{url}
+
+% hyperref
 \usepackage{hyperref}
-\hypersetup{unicode=true,
-            pdftitle={results reproduction},
-            pdfauthor={Jocelyn Hu},
-            pdfborder={0 0 0},
-            breaklinks=true}
-\urlstyle{same}  % don't use monospace font for urls
+
+% units.
+\usepackage{units}
+
+
+\setcounter{secnumdepth}{-1}
+
+% citations
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+
+% pandoc syntax highlighting
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -69,77 +85,170 @@
 \newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{#1}
-\usepackage{graphicx,grffile}
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-\IfFileExists{parskip.sty}{%
-\usepackage{parskip}
-}{% else
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+% longtable
+
+% multiplecol
+\usepackage{multicol}
+
+% strikeout
+\usepackage[normalem]{ulem}
+
+% morefloats
+\usepackage{morefloats}
+
+
+% tightlist macro required by pandoc >= 1.14
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{0}
-% Redefines (sub)paragraphs to behave more like sections
-\ifx\paragraph\undefined\else
-\let\oldparagraph\paragraph
-\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-\let\oldsubparagraph\subparagraph
-\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
 
-%%% Use protect on footnotes to avoid problems with footnotes in titles
-\let\rmarkdownfootnote\footnote%
-\def\footnote{\protect\rmarkdownfootnote}
+% title / author / date
+\title{results reproduction}
+\author{Jocelyn Hu}
+\date{}
 
-%%% Change title format to be more compact
-\usepackage{titling}
+%% -- tint overrides
+%% fonts, using roboto (condensed) as default
+\usepackage[sfdefault,condensed]{roboto}
+%% also nice: \usepackage[default]{lato}
 
-% Create subtitle command for use in maketitle
-\providecommand{\subtitle}[1]{
-  \posttitle{
-    \begin{center}\large#1\end{center}
-    }
+%% colored links, setting 'borrowed' from RJournal.sty with 'Thanks, Achim!'
+\RequirePackage{color}
+\definecolor{link}{rgb}{0.1,0.1,0.8} %% blue with some grey
+\hypersetup{
+  colorlinks,%
+  citecolor=link,%
+  filecolor=link,%
+  linkcolor=link,%
+  urlcolor=link
 }
 
-\setlength{\droptitle}{-2em}
+%% macros
+\makeatletter
 
-  \title{results reproduction}
-    \pretitle{\vspace{\droptitle}\centering\huge}
-  \posttitle{\par}
-    \author{Jocelyn Hu}
-    \preauthor{\centering\large\emph}
-  \postauthor{\par}
-    \date{}
-    \predate{}\postdate{}
+%% -- tint does not use italics or allcaps in title
+\renewcommand{\maketitle}{%     
+  \newpage
+  \global\@topnum\z@% prevent floats from being placed at the top of the page
+  \begingroup
+    \setlength{\parindent}{0pt}%
+    \setlength{\parskip}{4pt}%
+    \let\@@title\@empty
+    \let\@@author\@empty
+    \let\@@date\@empty
+    \ifthenelse{\boolean{@tufte@sfsidenotes}}{%
+      %\gdef\@@title{\sffamily\LARGE\allcaps{\@title}\par}%
+      %\gdef\@@author{\sffamily\Large\allcaps{\@author}\par}%
+      %\gdef\@@date{\sffamily\Large\allcaps{\@date}\par}%
+      \gdef\@@title{\begingroup\fontseries{b}\selectfont\LARGE{\@title}\par}%
+      \gdef\@@author{\begingroup\fontseries{l}\selectfont\Large{\@author}\par}%
+      \gdef\@@date{\begingroup\fontseries{l}\selectfont\Large{\@date}\par}%
+    }{%
+      %\gdef\@@title{\LARGE\itshape\@title\par}%
+      %\gdef\@@author{\Large\itshape\@author\par}%
+      %\gdef\@@date{\Large\itshape\@date\par}%
+      \gdef\@@title{\begingroup\fontseries{b}\selectfont\LARGE\@title\par\endgroup}%
+      \gdef\@@author{\begingroup\fontseries{l}\selectfont\Large\@author\par\endgroup}%
+      \gdef\@@date{\begingroup\fontseries{l}\selectfont\Large\@date\par\endgroup}%
+    }%
+    \@@title
+    \@@author
+    \@@date
+  \endgroup
+  \thispagestyle{plain}% suppress the running head
+  \tuftebreak% add some space before the text begins
+  \@afterindentfalse\@afterheading% suppress indentation of the next paragraph
+}
+
+%% -- tint does not use italics or allcaps in section/subsection/paragraph
+\titleformat{\section}%
+  [hang]% shape
+  %{\normalfont\Large\itshape}% format applied to label+text
+  {\fontseries{b}\selectfont\Large}% format applied to label+text
+  {\thesection}% label
+  {1em}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
+
+\titleformat{\subsection}%
+  [hang]% shape
+  %{\normalfont\large\itshape}% format applied to label+text
+  {\fontseries{m}\selectfont\large}% format applied to label+text
+  {\thesubsection}% label
+  {1em}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
+
+\titleformat{\paragraph}%
+  [runin]% shape
+  %{\normalfont\itshape}% format applied to label+text
+  {\fontseries{l}\selectfont}% format applied to label+text
+  {\theparagraph}% label
+  {1em}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
+
+%% -- tint does not use italics here either
+% Formatting for main TOC (printed in front matter)
+% {section} [left] {above} {before w/label} {before w/o label} {filler + page} [after]
+\ifthenelse{\boolean{@tufte@toc}}{%
+  \titlecontents{part}% FIXME
+    [0em] % distance from left margin
+    %{\vspace{1.5\baselineskip}\begin{fullwidth}\LARGE\rmfamily\itshape} % above (global formatting of entry)
+    {\vspace{1.5\baselineskip}\begin{fullwidth}\fontseries{m}\selectfont\LARGE} % above (global formatting of entry)
+    {\contentslabel{2em}} % before w/label (label = ``II'')
+    {} % before w/o label
+    {\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    [\end{fullwidth}] % after
+  \titlecontents{chapter}%
+    [0em] % distance from left margin
+    %{\vspace{1.5\baselineskip}\begin{fullwidth}\LARGE\rmfamily\itshape} % above (global formatting of entry)
+    {\vspace{1.5\baselineskip}\begin{fullwidth}\fontseries{m}\selectfont\LARGE} % above (global formatting of entry)
+    {\hspace*{0em}\contentslabel{2em}} % before w/label (label = ``2'')
+    {\hspace*{0em}} % before w/o label
+    %{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    {\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    [\end{fullwidth}] % after
+  \titlecontents{section}% FIXME
+    [0em] % distance from left margin
+    %{\vspace{0\baselineskip}\begin{fullwidth}\Large\rmfamily\itshape} % above (global formatting of entry)
+    {\vspace{0\baselineskip}\begin{fullwidth}\fontseries{m}\selectfont\Large} % above (global formatting of entry)
+    {\hspace*{2em}\contentslabel{2em}} % before w/label (label = ``2.6'')
+    {\hspace*{2em}} % before w/o label
+    %{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    {\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    [\end{fullwidth}] % after
+  \titlecontents{subsection}% FIXME
+    [0em] % distance from left margin
+    %{\vspace{0\baselineskip}\begin{fullwidth}\large\rmfamily\itshape} % above (global formatting of entry)
+    {\vspace{0\baselineskip}\begin{fullwidth}\fontseries{m}\selectfont\large} % above (global formatting of entry)
+    {\hspace*{4em}\contentslabel{4em}} % before w/label (label = ``2.6.1'')
+    {\hspace*{4em}} % before w/o label
+    %{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    {\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    [\end{fullwidth}] % after
+  \titlecontents{paragraph}% FIXME
+    [0em] % distance from left margin
+    %{\vspace{0\baselineskip}\begin{fullwidth}\normalsize\rmfamily\itshape} % above (global formatting of entry)
+    {\vspace{0\baselineskip}\begin{fullwidth}\fontseries{m}\selectfont\normalsize\rmfamily} % above (global formatting of entry)
+    {\hspace*{6em}\contentslabel{2em}} % before w/label (label = ``2.6.0.0.1'')
+    {\hspace*{6em}} % before w/o label
+    %{\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    {\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    [\end{fullwidth}] % after
+}{}
+
   
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
+\makeatother
+
+
 
 \begin{document}
+
 \maketitle
+
+
+
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -148,7 +257,7 @@
 \end{Shaded}
 
 \begin{verbatim}
-## -- Attaching packages -------------- tidyverse 1.2.1 --
+## -- Attaching packages ---------------------------------------------------------------------------- tidyverse 1.2.1 --
 \end{verbatim}
 
 \begin{verbatim}
@@ -159,7 +268,7 @@
 \end{verbatim}
 
 \begin{verbatim}
-## -- Conflicts ----------------- tidyverse_conflicts() --
+## -- Conflicts ------------------------------------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 \end{verbatim}
@@ -282,14 +391,16 @@
 \begin{verbatim}
 ## The following objects are masked from 'package:stats':
 ## 
-##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
-##     prop.test, quantile, sd, t.test, var
+##     binom.test, cor, cor.test, cov,
+##     fivenum, IQR, median, prop.test,
+##     quantile, sd, t.test, var
 \end{verbatim}
 
 \begin{verbatim}
 ## The following objects are masked from 'package:base':
 ## 
-##     max, mean, min, prod, range, sample, sum
+##     max, mean, min, prod, range,
+##     sample, sum
 \end{verbatim}
 
 \begin{Shaded}
@@ -439,21 +550,22 @@
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(haven)}
-\NormalTok{Dyadic_dta<-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\StringTok{"Data/AttanasioEtAl2011Vector.dta"}\NormalTok{)}
-\NormalTok{vector<-}\KeywordTok{read.csv}\NormalTok{(}\StringTok{"vector.csv"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{renegadelose =}\NormalTok{ renegade }\OperatorTok{-}\StringTok{ }\NormalTok{renegadewin)}
+\NormalTok{Dyadic_dta <-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\StringTok{"Data/AttanasioEtAl2011Vector.dta"}\NormalTok{)}
+\NormalTok{vector <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"vector.csv"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{renegadelose =}\NormalTok{ renegade }\OperatorTok{-}\StringTok{ }
+\StringTok{    }\NormalTok{renegadewin)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{c1<-}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(vector}\OperatorTok{$}\NormalTok{choice1))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Prop =}\NormalTok{ Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(Freq))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{spread}\NormalTok{(Var1, Prop)}
-\KeywordTok{colnames}\NormalTok{(c1) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"gamble"}\NormalTok{,}\KeywordTok{colnames}\NormalTok{(c1), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
+\NormalTok{c1 <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(vector}\OperatorTok{$}\NormalTok{choice1)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Prop =}\NormalTok{ Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(Freq)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{spread}\NormalTok{(Var1, }
+\NormalTok{    Prop)}
+\KeywordTok{colnames}\NormalTok{(c1) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"gamble"}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(c1), }
+    \DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
 
-\NormalTok{c1<-c1}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
+\NormalTok{c1 <-}\StringTok{ }\NormalTok{c1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, }
+\NormalTok{    gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
 
 
 \NormalTok{c1}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{[}\KeywordTok{is.na}\NormalTok{(c1}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{)] <-}\StringTok{ }\NormalTok{c1}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(c1}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{)]}
@@ -469,21 +581,23 @@
 
 \NormalTok{c1}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{[}\KeywordTok{is.na}\NormalTok{(c1}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{)] <-}\StringTok{ }\NormalTok{c1}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(c1}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{)]}
 
-\NormalTok{c1<-c1}\OperatorTok{*}\DecValTok{100}
-\NormalTok{c1<-}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{choice =} \StringTok{"choice1"}\NormalTok{, c1)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"gamble"}\NormalTok{, }\StringTok{"prop"}\NormalTok{, gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
+\NormalTok{c1 <-}\StringTok{ }\NormalTok{c1 }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{c1 <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{choice =} \StringTok{"choice1"}\NormalTok{, c1) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"gamble"}\NormalTok{, }
+    \StringTok{"prop"}\NormalTok{, gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, }
+\NormalTok{    gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{c2<-}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(vector}\OperatorTok{$}\NormalTok{choice2))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Prop =}\NormalTok{ Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(Freq))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{spread}\NormalTok{(Var1, Prop)}
-\KeywordTok{colnames}\NormalTok{(c2) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"gamble"}\NormalTok{,}\KeywordTok{colnames}\NormalTok{(c2), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
+\NormalTok{c2 <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(vector}\OperatorTok{$}\NormalTok{choice2)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Prop =}\NormalTok{ Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(Freq)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{spread}\NormalTok{(Var1, }
+\NormalTok{    Prop)}
+\KeywordTok{colnames}\NormalTok{(c2) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"gamble"}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(c2), }
+    \DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
 
-\NormalTok{c2<-c2}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
+\NormalTok{c2 <-}\StringTok{ }\NormalTok{c2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, }
+\NormalTok{    gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
 
 \NormalTok{c2}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{[}\KeywordTok{is.na}\NormalTok{(c2}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{)] <-}\StringTok{ }\NormalTok{c2}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(c2}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{)]}
 
@@ -498,27 +612,29 @@
 
 \NormalTok{c2}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{[}\KeywordTok{is.na}\NormalTok{(c2}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{)] <-}\StringTok{ }\NormalTok{c2}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(c2}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{)]}
 
-\NormalTok{c2<-c2}\OperatorTok{*}\DecValTok{100}
-\NormalTok{c2<-}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{choice =} \StringTok{"choice1"}\NormalTok{, c2)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"gamble"}\NormalTok{, }\StringTok{"prop"}\NormalTok{, gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
+\NormalTok{c2 <-}\StringTok{ }\NormalTok{c2 }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{c2 <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{choice =} \StringTok{"choice1"}\NormalTok{, c2) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"gamble"}\NormalTok{, }
+    \StringTok{"prop"}\NormalTok{, gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, }
+\NormalTok{    gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{vector2 <-}\StringTok{ }\NormalTok{vector[vector}\OperatorTok{$}\NormalTok{insample}\OperatorTok{==}\DecValTok{1}\NormalTok{, ]}
+\NormalTok{vector2 <-}\StringTok{ }\NormalTok{vector[vector}\OperatorTok{$}\NormalTok{insample }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, ]}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{c1b<-}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(vector2}\OperatorTok{$}\NormalTok{choice1))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Prop =}\NormalTok{ Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(Freq))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{spread}\NormalTok{(Var1, Prop)}
-\KeywordTok{colnames}\NormalTok{(c1b) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"gamble"}\NormalTok{,}\KeywordTok{colnames}\NormalTok{(c1b), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
+\NormalTok{c1b <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(vector2}\OperatorTok{$}\NormalTok{choice1)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Prop =}\NormalTok{ Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(Freq)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{spread}\NormalTok{(Var1, }
+\NormalTok{    Prop)}
+\KeywordTok{colnames}\NormalTok{(c1b) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"gamble"}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(c1b), }
+    \DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
 
-\NormalTok{c1b<-c1b}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
+\NormalTok{c1b <-}\StringTok{ }\NormalTok{c1b }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, }
+\NormalTok{    gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
 
 \NormalTok{c1b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{[}\KeywordTok{is.na}\NormalTok{(c1b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{)] <-}\StringTok{ }\NormalTok{c1b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(c1b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{)]}
 
@@ -533,21 +649,23 @@
 
 \NormalTok{c1b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{[}\KeywordTok{is.na}\NormalTok{(c1b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{)] <-}\StringTok{ }\NormalTok{c1b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(c1b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{)]}
 
-\NormalTok{c1b<-c1b}\OperatorTok{*}\DecValTok{100}
-\NormalTok{c1b<-}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{choice =} \StringTok{"choice2"}\NormalTok{, c1b)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"gamble"}\NormalTok{, }\StringTok{"prop"}\NormalTok{, gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
+\NormalTok{c1b <-}\StringTok{ }\NormalTok{c1b }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{c1b <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{choice =} \StringTok{"choice2"}\NormalTok{, c1b) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"gamble"}\NormalTok{, }\StringTok{"prop"}\NormalTok{, gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, }
+\NormalTok{        gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{c2b<-}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(vector2}\OperatorTok{$}\NormalTok{choice2))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Prop =}\NormalTok{ Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(Freq))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{spread}\NormalTok{(Var1, Prop)}
-\KeywordTok{colnames}\NormalTok{(c2b) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"gamble"}\NormalTok{,}\KeywordTok{colnames}\NormalTok{(c2b), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
+\NormalTok{c2b <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(vector2}\OperatorTok{$}\NormalTok{choice2)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Prop =}\NormalTok{ Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(Freq)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{spread}\NormalTok{(Var1, }
+\NormalTok{    Prop)}
+\KeywordTok{colnames}\NormalTok{(c2b) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"gamble"}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(c2b), }
+    \DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
 
-\NormalTok{c2b<-c2b}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
+\NormalTok{c2b <-}\StringTok{ }\NormalTok{c2b }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, }
+\NormalTok{    gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
 
 \NormalTok{c2b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{[}\KeywordTok{is.na}\NormalTok{(c2b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{)] <-}\StringTok{ }\NormalTok{c2b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(c2b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{1}\NormalTok{)]}
 
@@ -563,56 +681,59 @@
 \NormalTok{c2b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{[}\KeywordTok{is.na}\NormalTok{(c2b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{)] <-}\StringTok{ }\NormalTok{c2b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(c2b}\OperatorTok{$}\NormalTok{gamble_}\DecValTok{6}\NormalTok{)]}
 
 
-\NormalTok{c2b<-c2b}\OperatorTok{*}\DecValTok{100}
-\NormalTok{c2b<-}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{choice =} \StringTok{"choice2"}\NormalTok{, c2b)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"gamble"}\NormalTok{, }\StringTok{"prop"}\NormalTok{, gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
+\NormalTok{c2b <-}\StringTok{ }\NormalTok{c2b }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{c2b <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{choice =} \StringTok{"choice2"}\NormalTok{, c2b) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"gamble"}\NormalTok{, }\StringTok{"prop"}\NormalTok{, gamble_}\DecValTok{1}\NormalTok{, gamble_}\DecValTok{2}\NormalTok{, }
+\NormalTok{        gamble_}\DecValTok{3}\NormalTok{, gamble_}\DecValTok{4}\NormalTok{, gamble_}\DecValTok{5}\NormalTok{, gamble_}\DecValTok{6}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{c3b<-}\KeywordTok{merge}\NormalTok{(c2, c2b, }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{)}\OperatorTok{%>%}\StringTok{  }
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(gamble,choice)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{meanprop =} \KeywordTok{mean}\NormalTok{(prop))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{spread}\NormalTok{(choice,meanprop)}
+\NormalTok{c3b <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(c2, c2b, }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(gamble, }
+\NormalTok{    choice) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{meanprop =} \KeywordTok{mean}\NormalTok{(prop)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{spread}\NormalTok{(choice, meanprop)}
 
-\NormalTok{c3b<-}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{round =} \StringTok{"2"}\NormalTok{, c3b)}
+\NormalTok{c3b <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{round =} \StringTok{"2"}\NormalTok{, c3b)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{c3<-}\KeywordTok{merge}\NormalTok{(c1, c1b, }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{)}\OperatorTok{%>%}\StringTok{  }
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(gamble,choice)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{meanprop =} \KeywordTok{mean}\NormalTok{(prop))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{spread}\NormalTok{(choice,meanprop)}
+\NormalTok{c3 <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(c1, c1b, }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(gamble, }
+\NormalTok{    choice) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{meanprop =} \KeywordTok{mean}\NormalTok{(prop)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{spread}\NormalTok{(choice, meanprop)}
 
-\NormalTok{c3<-}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{round =} \StringTok{"1"}\NormalTok{, c3)}
+\NormalTok{c3 <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{round =} \StringTok{"1"}\NormalTok{, c3)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{gamblechoice<-}\KeywordTok{merge}\NormalTok{(c3,c3b,}\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sd_fullsample =} \StringTok{" "}\NormalTok{)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sd_sampleanalysed =} \StringTok{" "}\NormalTok{)}
+\NormalTok{gamblechoice <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(c3, c3b, }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sd_fullsample =} \StringTok{" "}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sd_sampleanalysed =} \StringTok{" "}\NormalTok{)}
 
-\KeywordTok{colnames}\NormalTok{(gamblechoice)[}\KeywordTok{colnames}\NormalTok{(gamblechoice)}\OperatorTok{==}\StringTok{"choice1"}\NormalTok{] <-}\StringTok{ "mean_fullsample"}
-\KeywordTok{colnames}\NormalTok{(gamblechoice)[}\KeywordTok{colnames}\NormalTok{(gamblechoice)}\OperatorTok{==}\StringTok{"choice2"}\NormalTok{] <-}\StringTok{ "mean_sampleanalysed"}
-\KeywordTok{colnames}\NormalTok{(gamblechoice)[}\KeywordTok{colnames}\NormalTok{(gamblechoice)}\OperatorTok{==}\StringTok{"gamble"}\NormalTok{] <-}\StringTok{ "Vars"}
+\KeywordTok{colnames}\NormalTok{(gamblechoice)[}\KeywordTok{colnames}\NormalTok{(gamblechoice) }\OperatorTok{==}\StringTok{ }
+\StringTok{    "choice1"}\NormalTok{] <-}\StringTok{ "mean_fullsample"}
+\KeywordTok{colnames}\NormalTok{(gamblechoice)[}\KeywordTok{colnames}\NormalTok{(gamblechoice) }\OperatorTok{==}\StringTok{ }
+\StringTok{    "choice2"}\NormalTok{] <-}\StringTok{ "mean_sampleanalysed"}
+\KeywordTok{colnames}\NormalTok{(gamblechoice)[}\KeywordTok{colnames}\NormalTok{(gamblechoice) }\OperatorTok{==}\StringTok{ }
+\StringTok{    "gamble"}\NormalTok{] <-}\StringTok{ "Vars"}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{vectorsum1<-vector}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(blue1,win1, group, cogrpmem, blue2, renegadelose, renegadewin, win2)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"Vars"}\NormalTok{,}\StringTok{"Value"}\NormalTok{,blue1,win1, group, cogrpmem, blue2, renegadewin, win2,renegadelose)}
+\NormalTok{vectorsum1 <-}\StringTok{ }\NormalTok{vector }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(blue1, win1, group, }
+\NormalTok{    cogrpmem, blue2, renegadelose, renegadewin, }
+\NormalTok{    win2) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"Vars"}\NormalTok{, }\StringTok{"Value"}\NormalTok{, blue1, }
+\NormalTok{    win1, group, cogrpmem, blue2, renegadewin, }
+\NormalTok{    win2, renegadelose)}
 
-\NormalTok{vectorsum1<-}\KeywordTok{na.omit}\NormalTok{(vectorsum1)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(Vars)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{summarise_each}\NormalTok{(}\KeywordTok{funs}\NormalTok{(}\DataTypeTok{mean_fullsample =} \KeywordTok{mean}\NormalTok{(Value), }\DataTypeTok{sd_fullsample =} \KeywordTok{sd}\NormalTok{(Value)))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{round =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\NormalTok{vectorsum1 <-}\StringTok{ }\KeywordTok{na.omit}\NormalTok{(vectorsum1) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(Vars) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summarise_each}\NormalTok{(}\KeywordTok{funs}\NormalTok{(}\DataTypeTok{mean_fullsample =} \KeywordTok{mean}\NormalTok{(Value), }
+        \DataTypeTok{sd_fullsample =} \KeywordTok{sd}\NormalTok{(Value))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{round =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }
+    \DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -630,74 +751,98 @@
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#need to fix decimal points}
+\CommentTok{# need to fix decimal points}
 
-\NormalTok{vectorsum2 <-}\StringTok{ }\NormalTok{vector[vector}\OperatorTok{$}\NormalTok{insample}\OperatorTok{==}\DecValTok{1}\NormalTok{, ]}
-\NormalTok{vectorsum2<-vectorsum2}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(blue1,win1, group, cogrpmem, blue2, renegadelose, renegadewin, win2)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"Vars"}\NormalTok{,}\StringTok{"Value"}\NormalTok{,blue1,win1, group, cogrpmem, blue2, renegadewin, win2,renegadelose)}
- 
+\NormalTok{vectorsum2 <-}\StringTok{ }\NormalTok{vector[vector}\OperatorTok{$}\NormalTok{insample }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, ]}
+\NormalTok{vectorsum2 <-}\StringTok{ }\NormalTok{vectorsum2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(blue1, win1, }
+\NormalTok{    group, cogrpmem, blue2, renegadelose, renegadewin, }
+\NormalTok{    win2) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{"Vars"}\NormalTok{, }\StringTok{"Value"}\NormalTok{, blue1, }
+\NormalTok{    win1, group, cogrpmem, blue2, renegadewin, }
+\NormalTok{    win2, renegadelose)}
 
-\NormalTok{vectorsum2<-}\KeywordTok{na.omit}\NormalTok{(vectorsum2)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(Vars)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{summarise_each}\NormalTok{(}\KeywordTok{funs}\NormalTok{(}\DataTypeTok{mean_sampleanalysed =} \KeywordTok{mean}\NormalTok{(Value), }\DataTypeTok{sd_sampleanalysed =} \KeywordTok{sd}\NormalTok{(Value)))}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{round =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+
+\NormalTok{vectorsum2 <-}\StringTok{ }\KeywordTok{na.omit}\NormalTok{(vectorsum2) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(Vars) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summarise_each}\NormalTok{(}\KeywordTok{funs}\NormalTok{(}\DataTypeTok{mean_sampleanalysed =} \KeywordTok{mean}\NormalTok{(Value), }
+        \DataTypeTok{sd_sampleanalysed =} \KeywordTok{sd}\NormalTok{(Value))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{round =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }
+    \DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{others<-}\StringTok{ }\KeywordTok{merge}\NormalTok{(vectorsum1, vectorsum2, }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{)}
-\NormalTok{total<-}\StringTok{ }\KeywordTok{merge}\NormalTok{(others, gamblechoice, }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{others <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(vectorsum1, vectorsum2, }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{total <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(others, gamblechoice, }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{)}
 \NormalTok{total[[}\DecValTok{4}\NormalTok{]] <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(total[[}\DecValTok{4}\NormalTok{]])}
 \NormalTok{total[[}\DecValTok{6}\NormalTok{]] <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(total[[}\DecValTok{6}\NormalTok{]])}
 \NormalTok{is.num <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(total, is.numeric)}
-\NormalTok{total[is.num] <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(total[is.num], round, }\DecValTok{3}\NormalTok{)}
-\NormalTok{total<-}\KeywordTok{arrange}\NormalTok{(total,round, Vars)}
-\NormalTok{total[}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{]<-}\StringTok{ " "}
-\NormalTok{total[}\DecValTok{9}\NormalTok{,}\DecValTok{4}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{11}\NormalTok{,}\DecValTok{4}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{18}\NormalTok{,}\DecValTok{4}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{19}\NormalTok{,}\DecValTok{4}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{1}\NormalTok{,}\DecValTok{6}\NormalTok{]<-}\StringTok{ " "}
-\NormalTok{total[}\DecValTok{9}\NormalTok{,}\DecValTok{6}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{11}\NormalTok{,}\DecValTok{6}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{18}\NormalTok{,}\DecValTok{6}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{19}\NormalTok{,}\DecValTok{6}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{9}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{10}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{11}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{18}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{19}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
-\NormalTok{total[}\DecValTok{20}\NormalTok{,}\DecValTok{2}\NormalTok{]<-}\StringTok{" "}
+\NormalTok{total[is.num] <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(total[is.num], round, }
+    \DecValTok{3}\NormalTok{)}
+\NormalTok{total <-}\StringTok{ }\KeywordTok{arrange}\NormalTok{(total, round, Vars)}
+\NormalTok{total[}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{9}\NormalTok{, }\DecValTok{4}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{11}\NormalTok{, }\DecValTok{4}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{18}\NormalTok{, }\DecValTok{4}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{19}\NormalTok{, }\DecValTok{4}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{1}\NormalTok{, }\DecValTok{6}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{9}\NormalTok{, }\DecValTok{6}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{11}\NormalTok{, }\DecValTok{6}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{18}\NormalTok{, }\DecValTok{6}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{19}\NormalTok{, }\DecValTok{6}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{9}\NormalTok{, }\DecValTok{2}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{10}\NormalTok{, }\DecValTok{2}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{11}\NormalTok{, }\DecValTok{2}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{18}\NormalTok{, }\DecValTok{2}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{19}\NormalTok{, }\DecValTok{2}\NormalTok{] <-}\StringTok{ " "}
+\NormalTok{total[}\DecValTok{20}\NormalTok{, }\DecValTok{2}\NormalTok{] <-}\StringTok{ " "}
 \KeywordTok{print}\NormalTok{(total)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##            Vars round mean_fullsample sd_fullsample mean_sampleanalysed
-## 1         blue1                 0.547                             0.545
-## 2      cogrpmem                 4.195         5.776               3.687
-## 3      gamble_1     1           8.739          <NA>               8.746
-## 4      gamble_2     1          17.757          <NA>              17.665
-## 5      gamble_3     1          18.196          <NA>              18.311
-## 6      gamble_4     1          29.290          <NA>              29.168
-## 7      gamble_5     1          11.253          <NA>              11.116
-## 8      gamble_6     1          14.765          <NA>              14.994
-## 9         group                 0.862                             0.869
-## 10         win1              5841.556      3831.769            5835.416
-## 11        blue2                 0.577                             0.577
-## 12     gamble_1     2           6.028          <NA>               5.991
-## 13     gamble_2     2          12.854          <NA>              12.759
-## 14     gamble_3     2          17.685          <NA>              17.759
-## 15     gamble_4     2          28.942          <NA>              28.750
-## 16     gamble_5     2          17.206          <NA>              17.328
-## 17     gamble_6     2          17.285          <NA>              17.414
-## 18 renegadelose                 0.018                             0.018
-## 19  renegadewin                 0.063                             0.064
-## 20         win2              6134.291      4045.737            6132.931
+##            Vars round mean_fullsample
+## 1         blue1                 0.547
+## 2      cogrpmem                 4.195
+## 3      gamble_1     1           8.739
+## 4      gamble_2     1          17.757
+## 5      gamble_3     1          18.196
+## 6      gamble_4     1          29.290
+## 7      gamble_5     1          11.253
+## 8      gamble_6     1          14.765
+## 9         group                 0.862
+## 10         win1              5841.556
+## 11        blue2                 0.577
+## 12     gamble_1     2           6.028
+## 13     gamble_2     2          12.854
+## 14     gamble_3     2          17.685
+## 15     gamble_4     2          28.942
+## 16     gamble_5     2          17.206
+## 17     gamble_6     2          17.285
+## 18 renegadelose                 0.018
+## 19  renegadewin                 0.063
+## 20         win2              6134.291
+##    sd_fullsample mean_sampleanalysed
+## 1                              0.545
+## 2          5.776               3.687
+## 3           <NA>               8.746
+## 4           <NA>              17.665
+## 5           <NA>              18.311
+## 6           <NA>              29.168
+## 7           <NA>              11.116
+## 8           <NA>              14.994
+## 9                              0.869
+## 10      3831.769            5835.416
+## 11                             0.577
+## 12          <NA>               5.991
+## 13          <NA>              12.759
+## 14          <NA>              17.759
+## 15          <NA>              28.750
+## 16          <NA>              17.328
+## 17          <NA>              17.414
+## 18                             0.018
+## 19                             0.064
+## 20      4045.737            6132.931
 ##    sd_sampleanalysed
 ## 1                   
 ## 2              3.899
@@ -740,30 +885,31 @@
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{total[}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
-\NormalTok{total[}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
-\NormalTok{total[}\DecValTok{9}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{9}\NormalTok{,}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
-\NormalTok{total[}\DecValTok{9}\NormalTok{,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{9}\NormalTok{,}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
-\NormalTok{total[}\DecValTok{10}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{10}\NormalTok{,}\DecValTok{3}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
-\NormalTok{total[}\DecValTok{20}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{20}\NormalTok{,}\DecValTok{3}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
-\NormalTok{total[}\DecValTok{10}\NormalTok{,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{10}\NormalTok{,}\DecValTok{5}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
-\NormalTok{total[}\DecValTok{20}\NormalTok{,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{20}\NormalTok{,}\DecValTok{5}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{total[}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{total[}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{total[}\DecValTok{9}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{9}\NormalTok{, }\DecValTok{3}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{total[}\DecValTok{9}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{9}\NormalTok{, }\DecValTok{5}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{total[}\DecValTok{10}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{10}\NormalTok{, }\DecValTok{3}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{total[}\DecValTok{20}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{20}\NormalTok{, }\DecValTok{3}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{total[}\DecValTok{10}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{10}\NormalTok{, }\DecValTok{5}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{total[}\DecValTok{20}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{20}\NormalTok{, }\DecValTok{5}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
 \NormalTok{total[[}\DecValTok{4}\NormalTok{]] <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(total[[}\DecValTok{4}\NormalTok{]])}
 \NormalTok{total[[}\DecValTok{6}\NormalTok{]] <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(total[[}\DecValTok{6}\NormalTok{]])}
-\NormalTok{total[}\DecValTok{10}\NormalTok{,}\DecValTok{4}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{10}\NormalTok{,}\DecValTok{4}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
-\NormalTok{total[}\DecValTok{20}\NormalTok{,}\DecValTok{4}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{20}\NormalTok{,}\DecValTok{4}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
-\NormalTok{total[}\DecValTok{10}\NormalTok{,}\DecValTok{6}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{10}\NormalTok{,}\DecValTok{6}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
-\NormalTok{total[}\DecValTok{20}\NormalTok{,}\DecValTok{6}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{20}\NormalTok{,}\DecValTok{6}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
-\NormalTok{total[}\DecValTok{11}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{11}\NormalTok{,}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
-\NormalTok{total[}\DecValTok{11}\NormalTok{,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{11}\NormalTok{,}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
-\NormalTok{total[}\DecValTok{18}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{18}\NormalTok{,}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
-\NormalTok{total[}\DecValTok{18}\NormalTok{,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{18}\NormalTok{,}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
-\NormalTok{total[}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
-\NormalTok{total[}\DecValTok{19}\NormalTok{,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{19}\NormalTok{,}\DecValTok{5}\NormalTok{]}\OperatorTok{*}\DecValTok{100}
+\NormalTok{total[}\DecValTok{10}\NormalTok{, }\DecValTok{4}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{10}\NormalTok{, }\DecValTok{4}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{total[}\DecValTok{20}\NormalTok{, }\DecValTok{4}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{20}\NormalTok{, }\DecValTok{4}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{total[}\DecValTok{10}\NormalTok{, }\DecValTok{6}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{10}\NormalTok{, }\DecValTok{6}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{total[}\DecValTok{20}\NormalTok{, }\DecValTok{6}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{20}\NormalTok{, }\DecValTok{6}\NormalTok{]}\OperatorTok{/}\DecValTok{1000}
+\NormalTok{total[}\DecValTok{11}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{11}\NormalTok{, }\DecValTok{3}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{total[}\DecValTok{11}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{11}\NormalTok{, }\DecValTok{5}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{total[}\DecValTok{18}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{18}\NormalTok{, }\DecValTok{3}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{total[}\DecValTok{18}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{18}\NormalTok{, }\DecValTok{5}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{total[}\DecValTok{19}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{19}\NormalTok{, }\DecValTok{3}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{total[}\DecValTok{19}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{total[}\DecValTok{19}\NormalTok{, }\DecValTok{5}\NormalTok{] }\OperatorTok{*}\StringTok{ }\DecValTok{100}
 
 
 \NormalTok{is.num <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(total, is.numeric)}
-\NormalTok{total[is.num] <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(total[is.num], round, }\DecValTok{3}\NormalTok{)}
+\NormalTok{total[is.num] <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(total[is.num], round, }
+    \DecValTok{3}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -787,49 +933,71 @@
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(dplyr)}
-\NormalTok{total<-total[}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\OperatorTok{:}\DecValTok{8}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{12}\OperatorTok{:}\DecValTok{17}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{19}\NormalTok{,}\DecValTok{18}\NormalTok{,}\DecValTok{20}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(total)),]}
+\NormalTok{total <-}\StringTok{ }\NormalTok{total[}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\OperatorTok{:}\DecValTok{8}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{12}\OperatorTok{:}\DecValTok{17}\NormalTok{, }\DecValTok{11}\NormalTok{, }
+    \DecValTok{19}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{20}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(total)), ]}
 
-\NormalTok{total[[}\StringTok{"round"}\NormalTok{]]<-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Gamble 1(safe)"}\NormalTok{,}\StringTok{"Gamble 2"}\NormalTok{,}\StringTok{"Gamble 3"}\NormalTok{, }\StringTok{"Gamble 4"}\NormalTok{, }\StringTok{"Gamble 5"}\NormalTok{, }\StringTok{"Gamble 6(riskiest)"}\NormalTok{,}\StringTok{"Won gamble in 1st round"}\NormalTok{,}\StringTok{"Winings 1st round ('000 Pesos)"}\NormalTok{,}\StringTok{"Joined a group"}\NormalTok{,}\StringTok{"Number of co-group members"}\NormalTok{,}\StringTok{"Gamble 1(safe)"}\NormalTok{, }\StringTok{"Gamble 2"}\NormalTok{, }\StringTok{"Gamble 3"}\NormalTok{, }\StringTok{"Gamble 4"}\NormalTok{, }\StringTok{"Gamble 5"}\NormalTok{, }\StringTok{"Gamble 6(riskiest)"}\NormalTok{,}\StringTok{"Won gamble in 2nd round"}\NormalTok{,}\StringTok{"Reneged having won gamble"}\NormalTok{,}\StringTok{"Reneged having lost gamble"}\NormalTok{,}\StringTok{"Winnings 2nd round ('000 Pesos)"}\NormalTok{)}
+\NormalTok{total[[}\StringTok{"round"}\NormalTok{]] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Gamble 1(safe)"}\NormalTok{, }\StringTok{"Gamble 2"}\NormalTok{, }
+    \StringTok{"Gamble 3"}\NormalTok{, }\StringTok{"Gamble 4"}\NormalTok{, }\StringTok{"Gamble 5"}\NormalTok{, }\StringTok{"Gamble 6(riskiest)"}\NormalTok{, }
+    \StringTok{"Won gamble in 1st round"}\NormalTok{, }\StringTok{"Winings 1st round ('000 Pesos)"}\NormalTok{, }
+    \StringTok{"Joined a group"}\NormalTok{, }\StringTok{"Number of co-group members"}\NormalTok{, }
+    \StringTok{"Gamble 1(safe)"}\NormalTok{, }\StringTok{"Gamble 2"}\NormalTok{, }\StringTok{"Gamble 3"}\NormalTok{, }
+    \StringTok{"Gamble 4"}\NormalTok{, }\StringTok{"Gamble 5"}\NormalTok{, }\StringTok{"Gamble 6(riskiest)"}\NormalTok{, }
+    \StringTok{"Won gamble in 2nd round"}\NormalTok{, }\StringTok{"Reneged having won gamble"}\NormalTok{, }
+    \StringTok{"Reneged having lost gamble"}\NormalTok{, }\StringTok{"Winnings 2nd round ('000 Pesos)"}\NormalTok{)}
 
-\NormalTok{total[[}\StringTok{"Vars"}\NormalTok{]]<-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{,}\StringTok{""}\NormalTok{)}
+\NormalTok{total[[}\StringTok{"Vars"}\NormalTok{]] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }
+    \StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{, }
+    \StringTok{""}\NormalTok{, }\StringTok{""}\NormalTok{)}
 
-\NormalTok{total<-total[,}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{3}\OperatorTok{:}\KeywordTok{ncol}\NormalTok{(total))]}
+\NormalTok{total <-}\StringTok{ }\NormalTok{total[, }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{3}\OperatorTok{:}\KeywordTok{ncol}\NormalTok{(total))]}
 \KeywordTok{head}\NormalTok{(total)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##                round Vars mean_fullsample sd_fullsample
-## 3     Gamble 1(safe)                8.739            NA
-## 4           Gamble 2               17.757            NA
-## 5           Gamble 3               18.196            NA
-## 6           Gamble 4               29.290            NA
-## 7           Gamble 5               11.253            NA
-## 8 Gamble 6(riskiest)               14.765            NA
-##   mean_sampleanalysed sd_sampleanalysed
-## 3               8.746                NA
-## 4              17.665                NA
-## 5              18.311                NA
-## 6              29.168                NA
-## 7              11.116                NA
-## 8              14.994                NA
+##                round Vars mean_fullsample
+## 3     Gamble 1(safe)                8.739
+## 4           Gamble 2               17.757
+## 5           Gamble 3               18.196
+## 6           Gamble 4               29.290
+## 7           Gamble 5               11.253
+## 8 Gamble 6(riskiest)               14.765
+##   sd_fullsample mean_sampleanalysed
+## 3            NA               8.746
+## 4            NA              17.665
+## 5            NA              18.311
+## 6            NA              29.168
+## 7            NA              11.116
+## 8            NA              14.994
+##   sd_sampleanalysed
+## 3                NA
+## 4                NA
+## 5                NA
+## 6                NA
+## 7                NA
+## 8                NA
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{total[}\DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{,}\DecValTok{3}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(total[}\DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{,}\DecValTok{3}\NormalTok{],}\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
-\NormalTok{total[}\DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(total[}\DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{],}\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
-\NormalTok{total[}\DecValTok{9}\NormalTok{,}\DecValTok{3}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(total[}\DecValTok{9}\NormalTok{,}\DecValTok{3}\NormalTok{],}\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
-\NormalTok{total[}\DecValTok{9}\NormalTok{,}\DecValTok{5}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(total[}\DecValTok{9}\NormalTok{,}\DecValTok{5}\NormalTok{],}\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
-\NormalTok{total[}\DecValTok{11}\OperatorTok{:}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(total[}\DecValTok{11}\OperatorTok{:}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{],}\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
-\NormalTok{total[}\DecValTok{11}\OperatorTok{:}\DecValTok{19}\NormalTok{,}\DecValTok{5}\NormalTok{]<-}\KeywordTok{paste}\NormalTok{(total[}\DecValTok{11}\OperatorTok{:}\DecValTok{19}\NormalTok{,}\DecValTok{5}\NormalTok{],}\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
+\NormalTok{total[}\DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(total[}\DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{, }\DecValTok{3}\NormalTok{], }\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{total[}\DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(total[}\DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{, }\DecValTok{5}\NormalTok{], }\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{total[}\DecValTok{9}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(total[}\DecValTok{9}\NormalTok{, }\DecValTok{3}\NormalTok{], }\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{total[}\DecValTok{9}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(total[}\DecValTok{9}\NormalTok{, }\DecValTok{5}\NormalTok{], }\StringTok{"%"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{total[}\DecValTok{11}\OperatorTok{:}\DecValTok{19}\NormalTok{, }\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(total[}\DecValTok{11}\OperatorTok{:}\DecValTok{19}\NormalTok{, }\DecValTok{3}\NormalTok{], }\StringTok{"%"}\NormalTok{, }
+    \DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{total[}\DecValTok{11}\OperatorTok{:}\DecValTok{19}\NormalTok{, }\DecValTok{5}\NormalTok{] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(total[}\DecValTok{11}\OperatorTok{:}\DecValTok{19}\NormalTok{, }\DecValTok{5}\NormalTok{], }\StringTok{"%"}\NormalTok{, }
+    \DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{total <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(total,}\KeywordTok{c}\NormalTok{(}\StringTok{"Observations"}\NormalTok{, }\StringTok{" "}\NormalTok{, }\StringTok{"2506"}\NormalTok{,}\StringTok{" "}\NormalTok{,}\StringTok{"2321"}\NormalTok{,}\StringTok{" "}\NormalTok{))}
-\KeywordTok{colnames}\NormalTok{(total) =}\StringTok{  }\KeywordTok{c}\NormalTok{(}\StringTok{" "}\NormalTok{,}\StringTok{"  "}\NormalTok{,}\StringTok{"Mean/Prop(Full Sample)"}\NormalTok{,}\StringTok{"s.d.(Full Sample)"}\NormalTok{,}\StringTok{"Mean/Prop(Sample Analysed)"}\NormalTok{,}\StringTok{"s.d.(Sample Analysed)"}\NormalTok{)}
+\NormalTok{total <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(total, }\KeywordTok{c}\NormalTok{(}\StringTok{"Observations"}\NormalTok{, }\StringTok{" "}\NormalTok{, }\StringTok{"2506"}\NormalTok{, }
+    \StringTok{" "}\NormalTok{, }\StringTok{"2321"}\NormalTok{, }\StringTok{" "}\NormalTok{))}
+\KeywordTok{colnames}\NormalTok{(total) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{" "}\NormalTok{, }\StringTok{"  "}\NormalTok{, }\StringTok{"Mean/Prop(Full Sample)"}\NormalTok{, }
+    \StringTok{"s.d.(Full Sample)"}\NormalTok{, }\StringTok{"Mean/Prop(Sample Analysed)"}\NormalTok{, }
+    \StringTok{"s.d.(Sample Analysed)"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -838,13 +1006,16 @@
 \KeywordTok{row.names}\NormalTok{(total) <-}\StringTok{ }\OtherTok{NULL}
 \NormalTok{total}\OperatorTok{$}\NormalTok{Vars <-}\StringTok{ }\OtherTok{NULL}
 \NormalTok{is.num <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(total, is.numeric)}
-\NormalTok{total[is.num] <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(total[is.num], round, }\DecValTok{3}\NormalTok{)}
+\NormalTok{total[is.num] <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(total[is.num], round, }
+    \DecValTok{3}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{stargazer}\NormalTok{(total, }\DataTypeTok{type =} \StringTok{"html"}\NormalTok{, }\DataTypeTok{out =} \StringTok{"summary.html"}\NormalTok{,}\DataTypeTok{summary.stat =} \KeywordTok{c}\NormalTok{(}\StringTok{"mean"}\NormalTok{), }\DataTypeTok{summary =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Table3: Experimental data"}\NormalTok{)}
+\KeywordTok{stargazer}\NormalTok{(total, }\DataTypeTok{type =} \StringTok{"html"}\NormalTok{, }\DataTypeTok{out =} \StringTok{"summary.html"}\NormalTok{, }
+    \DataTypeTok{summary.stat =} \KeywordTok{c}\NormalTok{(}\StringTok{"mean"}\NormalTok{), }\DataTypeTok{summary =} \OtherTok{FALSE}\NormalTok{, }
+    \DataTypeTok{title =} \StringTok{"Table3: Experimental data"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -886,7 +1057,7 @@ row\_spec(1, hline\_after = T)
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#position = "float_right" }
+\CommentTok{# position = 'float_right'}
 \KeywordTok{library}\NormalTok{(kableExtra)}
 \KeywordTok{library}\NormalTok{(params)}
 \end{Highlighting}
@@ -926,14 +1097,24 @@ row\_spec(1, hline\_after = T)
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{(total,}\DataTypeTok{format =} \StringTok{"latex"}\NormalTok{,}\DataTypeTok{row.names =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{digits =} \KeywordTok{getOption}\NormalTok{(}\StringTok{"3"}\NormalTok{), }\DataTypeTok{col.names =} \KeywordTok{c}\NormalTok{(}\StringTok{"Variables"}\NormalTok{,}\StringTok{" "}\NormalTok{,}\StringTok{"Mean/Prop"}\NormalTok{,}\StringTok{"s.d."}\NormalTok{,}\StringTok{"Mean/Prop"}\NormalTok{,}\StringTok{"s.d."}\NormalTok{), }\DataTypeTok{align =} \StringTok{'l'}\NormalTok{,}\DataTypeTok{escape =}\NormalTok{ F,}\DataTypeTok{booktabs =}\NormalTok{ F)}\OperatorTok{%>%}
-\StringTok{ }\KeywordTok{add_header_above}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{" "}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{, }\StringTok{"Full Sample"}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{,}\StringTok{"Sample Analysed"}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{))}\OperatorTok{%>%}\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{bootstrap_options =} \KeywordTok{c}\NormalTok{(}\StringTok{"striped"}\NormalTok{), }\DataTypeTok{full_width =}\NormalTok{ F, }\DataTypeTok{font_size =} \DecValTok{6}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{column_spec}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DataTypeTok{border_right =}\NormalTok{ T)}\OperatorTok{%>%}\KeywordTok{column_spec}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DataTypeTok{italic =}\NormalTok{ T)}\OperatorTok{%>%}\KeywordTok{add_header_above}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Table3: Experimental data"}\NormalTok{=}\DecValTok{6}\NormalTok{))}\OperatorTok{%>%}\KeywordTok{pack_rows}\NormalTok{(}\StringTok{"Gamble choice 1st round"}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DataTypeTok{bold =}\NormalTok{ T)}\OperatorTok{%>%}\KeywordTok{pack_rows}\NormalTok{(}\StringTok{"Gamble choice 2nd round"}\NormalTok{, }\DecValTok{11}\NormalTok{,}\DecValTok{16}\NormalTok{,}\DataTypeTok{bold =}\NormalTok{ T)}
+\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{(total, }\DataTypeTok{format =} \StringTok{"latex"}\NormalTok{, }\DataTypeTok{row.names =} \OtherTok{NA}\NormalTok{, }
+    \DataTypeTok{digits =} \KeywordTok{getOption}\NormalTok{(}\StringTok{"3"}\NormalTok{), }\DataTypeTok{col.names =} \KeywordTok{c}\NormalTok{(}\StringTok{"Variables"}\NormalTok{, }
+        \StringTok{" "}\NormalTok{, }\StringTok{"Mean/Prop"}\NormalTok{, }\StringTok{"s.d."}\NormalTok{, }\StringTok{"Mean/Prop"}\NormalTok{, }
+        \StringTok{"s.d."}\NormalTok{), }\DataTypeTok{align =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{escape =}\NormalTok{ F, }\DataTypeTok{booktabs =}\NormalTok{ F) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{add_header_above}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{`}\DataTypeTok{ }\StringTok{`}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{, }\StringTok{`}\DataTypeTok{Full Sample}\StringTok{`}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{, }
+        \StringTok{`}\DataTypeTok{Sample Analysed}\StringTok{`}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{bootstrap_options =} \KeywordTok{c}\NormalTok{(}\StringTok{"striped"}\NormalTok{), }
+    \DataTypeTok{full_width =}\NormalTok{ F, }\DataTypeTok{font_size =} \DecValTok{6}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{column_spec}\NormalTok{(}\DecValTok{4}\NormalTok{, }
+    \DataTypeTok{border_right =}\NormalTok{ T) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{column_spec}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DataTypeTok{italic =}\NormalTok{ T) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{add_header_above}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{`}\DataTypeTok{Table3: Experimental data}\StringTok{`}\NormalTok{ =}\StringTok{ }\DecValTok{6}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{pack_rows}\NormalTok{(}\StringTok{"Gamble choice 1st round"}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{6}\NormalTok{, }
+        \DataTypeTok{bold =}\NormalTok{ T) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{pack_rows}\NormalTok{(}\StringTok{"Gamble choice 2nd round"}\NormalTok{, }
+    \DecValTok{11}\NormalTok{, }\DecValTok{16}\NormalTok{, }\DataTypeTok{bold =}\NormalTok{ T)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Warning in rep(digits, length.out = m): 'x' is NULL so the result will be
-## NULL
+## Warning in rep(digits, length.out = m): 'x'
+## is NULL so the result will be NULL
 \end{verbatim}
 
 \begin{table}[H]
@@ -996,6 +1177,7 @@ Observations &  & 2506 &  & 2321 & \\
 \end{tabular}
 \endgroup{}
 \end{table}
+
 
 
 \end{document}
