@@ -1,0 +1,275 @@
+---
+title: "Table5"
+author: "Jocelyn Hu"
+date: "April 25, 2019"
+output: pdf_document
+---
+```{r}
+library(tidyverse)
+library(yardstick)
+#library(ggplot2)
+library(mosaic)
+library(stargazer)
+require(Stat2Data)
+library(scales)
+library(readr)
+library(rms)
+#library(dplyr)
+```
+
+```{r}
+library(haven)
+Dyadic_dta<- read_dta("Data/AttanasioEtAl2011Dyadic.dta")
+Dyadic<-read.csv("Dyadic.csv")
+Dyadic_mdum<-read.csv("Dyadic_mdum.csv")
+```
+
+```{r, eval = FALSE}
+glimpse(Dyadic_dta$inreg)
+str(Dyadic)
+```
+
+
+Mutate var stranger which does no exist in the original dataframe 
+```{r}
+tally(~Dyadic$municode)
+tally(~Dyadic$samegroup)
+#Dyadic<-na.omit(Dyadic) 
+Dyadic<-Dyadic%>%
+  mutate(stranger = 1 - as.numeric(Dyadic$frfam))
+
+```
+
+```{r}
+
+for (x in 1:70){
+name <-paste("mdum",x,sep="")
+Dyadic[[name]] <- ifelse(Dyadic$municode == x, 1, 0)
+}
+```
+
+```{r}
+Dyadic<-Dyadic %>% mutate_each(funs(factor), starts_with("mdum"))
+
+```
+
+<!-- ```{r} -->
+<!-- pervar<-c("samegroup","friend2","friendfamily","stranger", "frfam","family2", "friend1", "family1", "frfamcl", "difurban", "diffemale","difmarried") -->
+<!-- for (i in pervar) { -->
+<!-- Dyadic[[i]] <- (as.numeric(Dyadic[[i]]))*100 -->
+<!-- } -->
+
+<!-- Dyadic[["sumtcons"]] <- (as.numeric(Dyadic[["sumtcons"]]))/1000 -->
+
+<!-- Dyadic[["diftcons"]] <- (as.numeric(Dyadic[["diftcons"]]))/1000 -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- pervar<-c("samegroup","friend2","friendfamily","stranger", "frfam","family2", "friend1", "family1", "difurban","frfamcl", "diffemale","difmarried") -->
+
+<!-- for (i in pervar) { -->
+<!-- Dyadic[[i]] <- (as.numeric(Dyadic[[i]]))/100 -->
+<!-- } -->
+
+<!-- ``` -->
+
+```{r}
+#generate formula for column 1 of table 5
+mdum <- Dyadic[, grepl("mdum", names(Dyadic))]
+mdumf<-paste(names(mdum), collapse = '+')
+c1_formula <- as.formula(paste("samegroup ~ difchoice1+frfamcl+dcfrfamcl"))
+print(c1_formula)
+```
+
+```{r}
+library(glmmML)
+# c1 <- glmmboot(samegroup ~ difchoice1+frfamcl+dcfrfamcl, cluster = municode,family = binomial, data = Dyadic)
+# c1
+c1 <- glm(c1_formula,family = binomial(link="logit"), data = Dyadic_mdum)
+c1
+```
+
+```{r, message = FALSE}
+library(margins)
+c1_m<-margins(c1,data = find_data(c1, parent.frame()),variables = c("difchoice1","frfamcl","dcfrfamcl"),type = c("response","link"),vcov = stats::vcov(c1), vce = c("delta"), unit_ses = FALSE)
+summary(c1_m)
+```
+
+
+```{r}
+
+Dyadic_c3<-Dyadic_mdum %>%
+  dplyr::filter(frfamcl==1)
+c3_formula <- paste("samegroup ~ difchoice1 + friend2+ friendfamily +family2 +friend1 +difurban +diffemale+ difyage +difysch +difmarried +difcons+ difhhsize +difwin1+ sumchoice1 +sumurban+ sumfemale +sumyage+ sumysch +nummarried +sumcons+ sumhhsize +sumwin1+",mdumf)
+c3 <- glm(c3_formula,family = binomial(link="logit"), data = Dyadic_c3)
+c3
+```
+
+```{r}
+library("margins")
+c3_m<-margins(c3,data = find_data(c3, parent.frame()),variables = c("difchoice1","friend2","friendfamily","family2","friend1"),type = c("response","link"),vcov = stats::vcov(c3), vce = c("delta", "simulation", "bootstrap",  "none"), iterations = 50L, unit_ses = FALSE, eps = 1e-07)
+
+```
+
+
+
+```{r}
+Dyadic_c2<-Dyadic_mdum
+c2_formula <- paste("samegroup ~ difchoice1 + friend2+ friendfamily +family2 +friend1 +family1 + frfamcl + dcfrfamcl + difurban +diffemale+ difyage +difysch +difmarried +difcons+ difhhsize +difwin1+ sumchoice1 +sumurban+ sumfemale +sumyage+ sumysch +nummarried +sumcons+ sumhhsize +sumwin1+",mdumf)
+c2 <- glm(c2_formula,family = binomial(link="logit"), data = Dyadic_c2)
+c2
+```
+
+```{r}
+c2_m<-margins(c2,data = find_data(c2, parent.frame()),variables = c("difchoice1","frfamcl","dcfrfamcl","friend2","friendfamily","family2","friend1","family1"),type = c("response","link"),vcov = stats::vcov(c2), vce = c("delta", "simulation", "bootstrap",  "none"), iterations = 50L, unit_ses = FALSE, eps = 1e-07)
+
+```
+
+```{r}
+Dyadic_c4<-Dyadic_mdum%>%
+  filter(frfamcl==0)
+c4_formula <- paste("samegroup ~ difchoice1 + friend2+ friendfamily +family2 +friend1 +family1+difurban +diffemale+ difyage +difysch +difmarried +difcons+ difhhsize +difwin1+ sumchoice1 +sumurban+ sumfemale +sumyage+ sumysch +nummarried +sumcons+ sumhhsize +sumwin1+",mdumf)
+c4 <- glm(c4_formula,family = binomial(link="logit"), data = Dyadic_c4)
+```
+
+```{r}
+
+c4_m<-margins(c4,data = find_data(c4, parent.frame()),variables = c("difchoice1","friend2","friendfamily","family2","friend1","family1"),type = c("response","link"),vcov = stats::vcov(c4), vce = c("delta", "simulation", "bootstrap",  "none"), iterations = 50L, unit_ses = FALSE, eps = 1e-07)
+
+```
+
+```{r}
+Dyadic_c5<-Dyadic_mdum%>%
+  mutate(dcmaxgpffopt = maxgpffopt*difchoice1)%>%
+  filter(frfamcl==0)
+c5_formula <- paste("samegroup ~ difchoice1 + maxgpffopt + dcmaxgpffopt + difgpffopt + friend2+ family2 +friendfamily +friend1 +family1+difurban +diffemale+ difyage +difysch +difmarried +difcons+ difhhsize +difwin1+ sumchoice1 +sumurban+ sumfemale +sumyage+ sumysch +nummarried +sumcons+ sumhhsize +sumwin1+",mdumf)
+c5 <- glm(c5_formula,family = binomial(link="logit"), data = Dyadic_c5)
+
+
+```
+
+```{r}
+c5_m<-margins(c5,data = find_data(c5, parent.frame()),variables = c("difchoice1","maxgpffopt","dcmaxgpffopt","friend2","family2","friendfamily","friend1","family1"),type = c("response","link"),vcov = stats::vcov(c5), vce = c("delta", "simulation", "bootstrap",  "none"), iterations = 50L, unit_ses = FALSE, eps = 1e-07)
+
+```
+
+
+
+```{r, eval= FALSE}
+library(stargazer)
+stargazer(c1,c2,c3,c4,c5,type = "html", column.labels = c("1","2","3","4","5"), column.separate = NULL,dep.var.labels= "Same group",title=" Logit Regression of: Dyadic analysis of assortative mathcing on rosk attitudes Results",align=TRUE, out="table5_models.htm",omit.stat=c("LL","ser","f"),ci=FALSE, ci.level=0.90,no.space=TRUE)
+
+```
+
+```{r}
+library(dplyr)
+c1m<- as.data.frame(summary(c1_m))%>%
+  dplyr::select(AME,factor)
+```
+
+```{r}
+c2m<- as.data.frame(summary(c2_m))%>%
+  dplyr::select(AME,factor)
+
+
+c3m<-  as.data.frame(summary(c3_m))%>%
+  select(AME,factor)
+
+c4m<- summary(c4_m)%>%
+  select(AME,factor)
+
+c5m<- summary(c5_m)%>%
+  select(AME,factor)
+
+colnames(c1m)[colnames(c1m)=="AME"] <- "1"
+colnames(c2m)[colnames(c2m)=="AME"] <- "2"
+colnames(c3m)[colnames(c3m)=="AME"] <- "3"
+colnames(c4m)[colnames(c4m)=="AME"] <- "4"
+colnames(c5m)[colnames(c5m)=="AME"] <- "5" 
+```
+
+```{r}
+table5<-merge(x=c1m,y=c2m, by = "factor", all.y = TRUE)
+
+table5<-merge(x=table5,y=c3m, by = "factor", all.x = TRUE)
+
+
+table5<-merge(x=table5,y=c4m, by = "factor", all.x = TRUE)
+
+
+table5<-merge(x=table5,y=c5m, by = "factor", all.x = TRUE)
+```
+
+
+```{r}
+table5<-table5[with(table5,order(table5[["1"]],table5[["5"]])), ]%>%
+  mutate(factor = c("Diff. in gamble choice 1 x Close friends and family","Difference in gamble choice (round 1)","Close friends and family","One recognised kinship","Both recognised kinship","One recognised friendship, other kinship","One recognised friendship","Both recognised friendship"))
+
+```
+
+```{r}
+is.num <- sapply(table5, is.numeric)
+table5[is.num] <- lapply(table5[is.num], round, 3)
+```
+
+```{r}
+table5<- sapply(table5, as.character)
+table5[is.na(table5)] <- " "
+
+```
+
+```{r, eval = FALSE}
+sd<-read.csv("table5_sd.csv")
+colnames(sd)[colnames(sd)=="X1"] <- "1"
+colnames(sd)[colnames(sd)=="X2"] <- "2"
+colnames(sd)[colnames(sd)=="X3"] <- "3"
+colnames(sd)[colnames(sd)=="X4"] <- "4"
+colnames(sd)[colnames(sd)=="X5"] <- "5" 
+
+
+```
+
+```{r}
+library(plyr)
+table5_2<-rbind(table5,sd)
+table5_2<-table5_2[order(table5_2$factor, table5_2[["1"]]),]
+table5_2[duplicated(table5_2$factor),1]<- " "
+rownames(table5_2) <- NULL
+```
+
+```{r}
+is.num <- sapply(c5m, is.numeric)
+c5m[is.num] <- lapply(c5m[is.num], round, 3)
+table5_2[17,5]<-c5m[1,1]
+table5_2[17,1]<-"Max no. of close friends and family options"
+table5_2[18,5]<-"(0.003)"
+table5_2[19,5]<-c5m[8,1]
+table5_2[20,5]<-"4.2e-04"
+table5_2[19,1]<-"Diff. in gamble choice x Max no. close friends and family options "
+table5_2<- sapply(table5_2, as.character)
+table5_2[is.na(table5_2)] <- " "
+```
+
+
+
+```{r, result = 'asis'}
+#position = "float_right" 
+library(kableExtra)
+library(params)
+library(knitr)
+table5_print<-knitr::kable(table5_2,format = "html", row.names = NA,align = 'c',escape = F,booktabs = T, col.names = c("","1","2","3","4","5"))%>%add_header_above(c(" " = 1, "All dyads" = 2,"Close friends and family" = 1, "Other dyads" = 2))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size = 16)%>%add_header_above(c("Table 5: Dyadic analysis of assortative matching on risk attitudes"=6))%>% add_footnote("Notes: Marginal effects reported. Corresponding standard errors (in parentheses) adjusted to account for non-independence within municipalities by clustering; *** - sig. at 1% level; ** - sig. at 5% level; * - sig. at 10% level. # - 4 additional municipalities were dropped from this regression because, in one, all of the dyads joined the same group and, in three, none of the dyads joined the same group; ## - Controls included: One lives in municipal centre, one not, Different genders, Difference in age, Difference in years of schooling, Difference in marital status, Difference in log household consumption, Difference in household size, Difference in round 1 winnings, Sum of gamble choices,
+Number who live in municipal centre, Number of females, Sum of ages, Sum of years of schooling, Number who are married (not to each other), Sum log household consumption, Sum of household sizes, Sum of round 1 winnings.", notation="alphabet")
+
+print(table5_print)
+
+```
+
+
+
+
+
+```{r}
+#In addition to the estimation procedures and plot() generic, margins offers several plotting methods for model objects. First, there is a new generic cplot() that displays predictions or marginal effects (from an "lm" or "glm" model) of a variable conditional across values of third variable (or itself). For example, here is a graph of predicted probabilities from a logit model:
+
+cplot(c1, x = "difchoice1", se.type = "shade")
+```
