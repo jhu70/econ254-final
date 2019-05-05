@@ -39,6 +39,7 @@ options(tinytex.verbose = TRUE)
 
 ```{r message=FALSE, results='hide', echo=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
+library(dplyr)
 library(yardstick)
 library(rticles)
 library(ggplot2)
@@ -86,21 +87,21 @@ The bar chart and all the summary tables in this paper are reproduced successful
 ```{r figure1 data, echo=FALSE, warning=FALSE, message=FALSE, include = FALSE}
 Dyadic<- read.csv("Dyadic.csv") 
 tab1<-Dyadic%>%
-  filter(inreg == 1 & frfamcl == 1)
+  dplyr::filter(inreg == 1 & frfamcl == 1)
 tab2<- Dyadic%>%
-  filter(inreg == 1 & frfamcl == 0)
+  dplyr::filter(inreg == 1 & frfamcl == 0)
 library(gmodels)
 tab11<- as.data.frame(with(tab1, CrossTable(difchoice1, samegroup, missing.include=TRUE,prop.c = FALSE,prop.chisq = FALSE, chisq = FALSE, prop.t = FALSE)))
 
 green<-tab11%>%
-  filter(prop.col.y == 1)%>%
+  dplyr::filter(prop.col.y == 1)%>%
   select(prop.row.Freq, prop.row.x)%>%
   mutate(type = "Geog. prox. family& friends (4,466)")
 
 tab12<- as.data.frame(with(tab2, CrossTable(difchoice1, samegroup, missing.include=TRUE,prop.c = FALSE,prop.chisq = FALSE, chisq = FALSE, prop.t = FALSE)))
 
 red<-tab12%>%
-  filter(prop.col.y == 1)%>%
+  dplyr::filter(prop.col.y == 1)%>%
   select(prop.row.Freq, prop.row.x)%>%
   mutate(type = "Other (82,052)")
 
@@ -609,7 +610,7 @@ summary(c2)
 c2_m<-margins(c2, data = Dyadic_mdum,variables = c("difchoice1","frfamcl","dcfrfamcl","friend2","friendfamily","family2","friend1","family1"),type = c("response","link"),vcov = stats::vcov(c2), vce = c("delta"), iterations = 50L, unit_ses = FALSE, eps = 1e-07)
 
 Dyadic_c4<-Dyadic_mdum%>%
-  filter(frfamcl==0)
+  dplyr::filter(frfamcl==0)
 c4_formula <- paste("samegroup ~ difchoice1 + friend2+ friendfamily +family2 +friend1 +family1+difurban +diffemale+ difyage +difysch +difmarried +difcons+ difhhsize +difwin1+ sumchoice1 +sumurban+ sumfemale +sumyage+ sumysch +nummarried +sumcons+ sumhhsize +sumwin1+",mdumf)
 c4 <- glm(c4_formula,family = binomial(link="logit"), data = Dyadic_c4)
 
@@ -619,7 +620,7 @@ c4_m<-margins(c4,data = find_data(c4, parent.frame()),variables = c("difchoice1"
 
 Dyadic_c5<-Dyadic_mdum%>%
   mutate(dcmaxgpffopt = maxgpffopt*difchoice1)%>%
-  filter(frfamcl==0)
+  dplyr::filter(frfamcl==0)
 c5_formula <- paste("samegroup ~ difchoice1 + maxgpffopt + dcmaxgpffopt + difgpffopt + friend2+ family2 +friendfamily +friend1 +family1+difurban +diffemale+ difyage +difysch +difmarried +difcons+ difhhsize +difwin1+ sumchoice1 +sumurban+ sumfemale +sumyage+ sumysch +nummarried +sumcons+ sumhhsize +sumwin1+",mdumf)
 c5 <- glm(c5_formula,family = binomial(link="logit"), data = Dyadic_c5)
 
@@ -730,14 +731,22 @@ library(knitr)
 knitr::kable(table5_2,format = "latex", row.names = NA,align = 'c',booktabs = T, col.names = c("","1","2","3","4","5"))%>%add_header_above(c(" " = 1, "All dyads" = 2,"Close friends and family" = 1, "Other dyads" = 2))%>%  kable_styling(latex_options = c("hold_position"), full_width = F, font_size =7)%>%add_header_above(c("Table 5: Dyadic analysis of assortative matching on risk attitudes"=6))%>% add_footnote("Notes: Marginal effects reported. Corresponding standard errors (in parentheses) adjusted to account for non-independence within municipalities by clustering; *** - sig. at 1% level; ** - sig. at 5% level; * - sig. at 10% level. # - 4 additional municipalities were dropped from this regression because, in one, all of the dyads joined the same group and, in three, none of the dyads joined the same group; ## - Controls included: One lives in municipal centre, one not, Different genders, Difference in age, Difference in years of schooling, Difference in marital status, Difference in log household consumption, Difference in household size, Difference in round 1 winnings, Sum of gamble choices,Number who live in municipal centre, Number of females, Sum of ages, Sum of years of schooling, Number who are married (not to each other), Sum log household consumption, Sum of household sizes, Sum of round 1 winnings.", notation="alphabet")
 ```
 Table 5 presents the marginal effects of five logit regressions. In the paper, two models are mainly analyze the test the hypothesis. The first model is:  
-![](model1.png){width=100% } 
+
+
+```{r, out.width='60%', fig.align='center', include = TRUE, echo = FALSE}
+knitr::include_graphics('model1.png')
+```
 
 The dependent variable is a binary variable indicating whether people join the same group or not. $beta_1$ gives the evidence on whether close family and friends are more likely to group together. $beta_2$ is the difference in gamble choices, which is a proxy of risk attitudes. $beta_3$, one of the most importaant predictors, tells us whether close family and friends assort more strongly with respect to risk attitudes than who are unfamiliar. If its marginal effect is significantly negative, the answer would be yes. This model correponds to the first column in table 5. The result confirms two hypotheses. First, grouping is more likely among close family and friends than the unfamiliar. Second, the significant negative marginal effect of the interaction term indicates that among close family and friends grouping is strongly assortative with respect to risk attitudes and among unfamiliar individuals grouping may or may not be assortative with respect to risk attitudes.
 
 A possible explanation is that being close friends and family is associated with a higher likelihood of grouping gather. Because family and friends are considered more trustworthy than strangers, and people with available connections but group with unfamiliars are suspected of being untructwothy
 
 The second model includes the three variables from model 1 and is added more controls regarding the nature of relationships of friends and kinship. It correponds to second column of table 5.  
-![](model2.png){width=100% } 
+
+
+```{r, out.width='60%', fig.align='center', include = TRUE, echo = FALSE}
+knitr::include_graphics('model2.png')
+```
 
 The results of the second model support the robustness of the findings of the first model. The additional controls lead to a significant reduction in the size of the marginal effect
 of ‘Close friends and family’. While still positive and significant, the marginal effect is less than one fifth of its former size.
@@ -749,7 +758,7 @@ In the last column, the third hypothesis is tested and according to the statisti
 library(miceadds)
 model_formula1 <- as.formula(pdefault ~  grpFFcl.y+grpmem+gch2+gfem+gage+gurb+gysch+gmar+glcons+ghhsz)
 tablea1_1<-tablea1%>%
-  filter(grpmem<=3)
+  dplyr::filter(grpmem<=3)
 
 # col1<-lm.cluster(model_formula1,data =tablea1_1,cluster = tablea1_1$municode)
 # summary(col1)
