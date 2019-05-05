@@ -1,0 +1,374 @@
+\documentclass[]{elsarticle} %review=doublespace preprint=single 5p=2 column
+%%% Begin My package additions %%%%%%%%%%%%%%%%%%%
+\usepackage[hyphens]{url}
+
+
+
+\usepackage{lineno} % add
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\bibliographystyle{elsarticle-harv}
+\biboptions{sort&compress} % For natbib
+\usepackage{graphicx}
+\usepackage{booktabs} % book-quality tables
+%%%%%%%%%%%%%%%% end my additions to header
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \usepackage{fontspec}
+  \ifxetex
+    \usepackage{xltxtra,xunicode}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={},
+            colorlinks=false,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+
+\setcounter{secnumdepth}{0}
+% Pandoc toggle for numbering sections (defaults to be off)
+\setcounter{secnumdepth}{0}
+% Pandoc header
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.2em}
+
+
+
+\begin{document}
+\begin{frontmatter}
+
+  \title{}
+    \author[Smith College]{Jocelyn Jingjing Hu}
+   \ead{jhu70@smith.edu} 
+  
+    \author[Smith College]{Richelle Ju}
+   \ead{tju@smith.edu} 
+  
+    \author[Smith College]{Tiphanie Chow}
+   \ead{tchow@smith.edu} 
+  
+    \author[Hampshire College]{Katherine Lim}
+   \ead{kql15@hampshire.edu} 
+  
+      \address[Smith College]{Department of Economics, Pierce Hall, Northampton, MA, 01063}
+  
+  \begin{abstract}
+  An important principle of economics is that people respond to
+  incentives. For that reason, government and organizations implement
+  incentives to encourage prosocial behavior. This paper looks at how
+  monetary and nonmonetary incentives change people's decisions to act
+  prosocially, and how these effects differ across gender. It will start
+  by discussing the paper about the effect of monetary incentives on
+  charity donations, and will then look at the literature on the drivers
+  of prosocial behavior and the effectiveness of incentives. Lastly, we
+  will tackle unanswered questions by suggesting a more comprehensive
+  experimental design that addresses the gaps in the literature by
+  considering a new population. \par
+  \textbf{JEL Classification:} C91, C93, D90 \par
+  \textbf{Keywords:} Individual Behavior, Laboratory Experiments, Field
+  Experiment, Prosocial behavior
+  \end{abstract}
+  
+ \end{frontmatter}
+
+\section{1. Introduction}\label{introduction}
+
+\section{2. Main paper}\label{main-paper}
+
+\section{3. Reproduction of}\label{reproduction-of}
+
+The following section will discuss the reproduction of all the relevant
+figures, p-values and regression results to ``Click for Charity''
+experiment presented in the paper. The discussed regression tables are
+at the end of the paper, and the relevant regression for the mentioned
+p-values can be found in the appendix. We weren't able to replicate the
+results for ``Bike for Charity'' as the data was not available.
+
+As in the, the analysis of the results will focus first on the good
+cause and the bad cause cases separately in two figures below and then
+finally analyze of all causes together by running an OLS regression. The
+two figures below are substantially similar and don't differ graphically
+from the original paper's.
+
+Figure 1 below summarizes the effort of participants for the cause in
+the public and private conditions, with and without incentives. The
+first panel (A) defines the good cause by the participant's perception
+of the cause, while the second panel (B) defines it by the consensus of
+the Princeton students (Red Cross for the good cause). The figure shows
+the average number of keypresses and their standard errors by payment
+scheme and visibility of the participation. The quantitative results are
+consistent across both panels. Firstly, in support of the Image
+motivation hypothesis, we see that without incentives, participants
+produce more effort in the public conditions. The difference was
+significant at the 5\% and 1\% level for panel A and B respectively. The
+introduction of monetary incentives does not increase the effort in the
+public conditions, but does so in private condition. In the public
+condition, there is a non-statistically significant decline
+(p\textgreater{}0.3 for both panels) in effort. In the private
+condition, there is a significant increase (p=0.048 and p=0.023 for
+panel A and B respectively) in effort. These results support the
+effectiveness hypothesis.
+
+\% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard
+University. E-mail: hlavac at fas.harvard.edu \% Date and time: Sun, May
+05, 2019 - 12:53:50 AM
+
+\begin{table}[!htbp] \centering 
+  \caption{Table A1: Group-level analysis of defections: Dependent variable = proportion of members that default} 
+  \label{} 
+\scriptsize 
+\begin{tabular}{@{\extracolsep{0.3pt}}lccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+\\[-1.8ex] & \multicolumn{3}{c}{Proportion of members that default} \\ 
+\\[-1.8ex] & \textit{felm} & \multicolumn{2}{c}{\textit{OLS}} \\ 
+ & Groups of 2 or 3 & All groups &  \\ 
+\\[-1.8ex] & (1) & (2) & (3)\\ 
+\hline \\[-1.8ex] 
+ 1:Density of close friends and family network within group & $-$0.067$^{***}$ & $-$0.034 & $-$0.155$^{**}$ \\ 
+  & (0.021) & (0.029) & (0.066) \\ 
+  2:Number of group members & 0.030 & 0.001 & $-$0.004 \\ 
+  & (0.021) & (0.004) & (0.005) \\ 
+  1x2 &  &  & 0.039$^{**}$ \\ 
+  &  &  & (0.019) \\ 
+  Average gamble choice & 0.012 & 0.012 & 0.011 \\ 
+  & (0.011) & (0.009) & (0.009) \\ 
+  Proportion of females & 0.050 & 0.032 & 0.031 \\ 
+  & (0.048) & (0.037) & (0.037) \\ 
+  Average age & $-$0.000 & $-$0.000 & $-$0.000 \\ 
+  & (0.002) & (0.001) & (0.001) \\ 
+  Proportion living in municipal centre & 0.082$^{**}$ & 0.031 & 0.021 \\ 
+  & (0.036) & (0.031) & (0.031) \\ 
+  Average years of education & $-$0.013$^{***}$ & $-$0.010$^{**}$ & $-$0.010$^{**}$ \\ 
+  & (0.005) & (0.005) & (0.005) \\ 
+  Proportion married & $-$0.047 & $-$0.001 & $-$0.004 \\ 
+  & (0.048) & (0.035) & (0.035) \\ 
+  Average log household consumption & 0.007 & $-$0.019 & $-$0.018 \\ 
+  & (0.027) & (0.025) & (0.025) \\ 
+  Average household size & 0.004 & 0.004 & 0.004 \\ 
+  & (0.006) & (0.004) & (0.004) \\ 
+  Constant & $-$0.124 & 0.212 & 0.218 \\ 
+  & (0.340) & (0.312) & (0.311) \\ 
+ Municipality dummies & no & no & yes \\ 
+Observations & 251 & 526 & 526 \\ 
+\hline \\[-1.8ex] 
+\textit{Notes:} & \multicolumn{3}{l}{$^{***}$Significant at the 1 percent level.} \\ 
+ & \multicolumn{3}{l}{$^{**}$Significant at the 5 percent level.} \\ 
+ & \multicolumn{3}{l}{$^{*}$Significant at the 10 percent level.} \\ 
+ & \multicolumn{3}{l}{Linear regression coefficients reported.} \\ 
+ & \multicolumn{3}{l}{Standard errors (in parentheses)} \\ 
+ & \multicolumn{3}{l}{adjusted to account of non-independence} \\ 
+ & \multicolumn{3}{l}{within municipalities by clustering} \\ 
+\end{tabular} 
+\end{table}
+
+\begin{center}\includegraphics[width=1\linewidth]{Final_paper_files/figure-latex/unnamed-chunk-4-1} \end{center}
+
+\begin{table}[!h]
+\centering\begingroup\fontsize{8}{10}\selectfont
+
+\begin{tabular}{lrllrll}
+\toprule
+\multicolumn{1}{c}{Table 1: Experimental subjects} \\
+\cmidrule(l{3pt}r{3pt}){1-1}
+\multicolumn{1}{c}{ } & \multicolumn{3}{c}{Full Sample} & \multicolumn{3}{c}{Sample Analysed} \\
+\cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
+  & Obs. & Mean/Prop & s.d. & Obs. & Mean/Prop & s.d.\\
+\midrule
+Female & 2420 & 87.52\% & 33.06 & 2321 & 87.2\% & 33.41\\
+Age (years) & 2396 & 41.78 & 11.39 & 2321 & 41.72 & 11.37\\
+Education (years) & 2397 & 3.7 & 3.12 & 2321 & 3.7 & 3.13\\
+Household head & 2423 & 28.64\% &  & 2321 & 28.78\% & \\
+Married & 2420 & 77.11\% &  & 2321 & 77.73\% & \\
+\addlinespace
+Lives in municipal centre & 2478 & 33.86\% & 47.33 & 2321 & 34.38\% & 47.51\\
+Household consumption ('000 Pesos/month) 2 & 2478 & 433.64 & 254.9 & 2321 & 427.28 & 249.91\\
+Log household consumption per month & 2478 & 12.82 &  & 2321 & 12.81 & \\
+Household size & 2452 & 7.34 & 3.19 & 2321 & 7.27 & 3.13\\
+No. of kin recognized in session & 2506 & 0.32 &  & 2321 & 0.32 & \\
+\addlinespace
+No. of friends recognized in session & 2506 & 2.39 & 2.57 & 2321 & 2.42 & 2.57\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+\end{table}
+
+\begin{table}[!h]
+
+\caption{\label{tab:table 2}Gamble choices}
+\centering
+\fontsize{6}{8}\selectfont
+\begin{tabular}{lllllll}
+\toprule
+Gamble Choice & Low payoff(yellow) & High payoff(blue) & Expected value & Standard Deviation & Risk aversion class & CRRA range\\
+\midrule
+Gamble1 & 3000 & 3000 & 3000 & 0 & Extreme & infinity to 7.49\\
+Gamble2 & 2700 & 5700 & 4200 & 2121 & Severe & 7.49 to 1.73\\
+Gamble3 & 2400 & 7200 & 4800 & 3394 & Intermediate & 1.73 to 0.81\\
+Gamble4 & 1800 & 9000 & 5400 & 5091 & Moderate & 0.81 to 0.46\\
+Gamble5 & 1000 & 11000 & 6000 & 7071 & Slight-neutral & 0.47 to 0.00\\
+\addlinespace
+Gamble6 & 0 & 12000 & 6000 & 8485 & Neutral-negative & 0 to -ve infinity\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!h]
+\centering\begingroup\fontsize{8}{10}\selectfont
+
+\begin{tabular}{llllll}
+\toprule
+\multicolumn{6}{c}{Table3: Experimental data} \\
+\cmidrule(l{3pt}r{3pt}){1-6}
+\multicolumn{2}{c}{ } & \multicolumn{2}{c}{Full Sample} & \multicolumn{2}{c}{Sample Analysed} \\
+\cmidrule(l{3pt}r{3pt}){3-4} \cmidrule(l{3pt}r{3pt}){5-6}
+Variables &   & Mean/Prop & s.d. & Mean/Prop & s.d.\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{6}{l}{\textbf{Gamble choice 1st round}}\\
+\hspace{1em}Gamble 1(safe) &  & 8.739\% &  & 8.746\% & \\
+\hspace{1em}Gamble 2 &  & 17.757\% &  & 17.665\% & \\
+\hspace{1em}Gamble 3 &  & 18.196\% &  & 18.311\% & \\
+\hspace{1em}Gamble 4 &  & 29.29\% &  & 29.168\% & \\
+\hspace{1em}Gamble 5 &  & 11.253\% &  & 11.116\% & \\
+\hspace{1em}Gamble 6(riskiest) &  & 14.765\% &  & 14.994\% & \\
+Won gamble in 1st round &  & 54.7\% &  & 54.5\% & \\
+Winings 1st round ('000 Pesos) &  & 5.842 & 3.832 & 5.835 & 3.838\\
+Joined a group &  & 86.2\% &  & 86.9\% & \\
+Number of co-group members &  & 4.195 & 5.776 & 3.687 & 3.899\\
+\addlinespace[0.3em]
+\multicolumn{6}{l}{\textbf{Gamble choice 2nd round}}\\
+\hspace{1em}Gamble 1(safe) &  & 6.028\% &  & 5.991\% & \\
+\hspace{1em}Gamble 2 &  & 12.854\% &  & 12.759\% & \\
+\hspace{1em}Gamble 3 &  & 17.685\% &  & 17.759\% & \\
+\hspace{1em}Gamble 4 &  & 28.942\% &  & 28.75\% & \\
+\hspace{1em}Gamble 5 &  & 17.206\% &  & 17.328\% & \\
+\hspace{1em}Gamble 6(riskiest) &  & 17.285\% &  & 17.414\% & \\
+Won gamble in 2nd round &  & 57.7\% &  & 57.7\% & \\
+Reneged having won gamble &  & 6.3\% &  & 6.4\% & \\
+Reneged having lost gamble &  & 1.8\% &  & 1.8\% & \\
+Winnings 2nd round ('000 Pesos) &  & 6.134 & 4.046 & 6.133 & 4.052\\
+Observations &  & 2506 &  & 2321 & \\
+\bottomrule
+\end{tabular}
+\endgroup{}
+\end{table}
+
+\begin{table}[!h]
+\centering\begingroup\fontsize{6}{8}\selectfont
+
+\begin{tabular}{lllll}
+\toprule
+\multicolumn{5}{c}{Table4: Experimental data} \\
+\cmidrule(l{3pt}r{3pt}){1-5}
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{All dyads} & \multicolumn{1}{c}{Close family and friends} & \multicolumn{1}{c}{Other dyads} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-4} \cmidrule(l{3pt}r{3pt}){5-5}
+  & Mean/Prop & s.d. & Mean/Prop & s.d.\\
+\midrule
+Joined same group in round 2(\%) & 9.21\% &  & 29.467\% & 8.107\%\\
+Difference in gamble choice(round1) & 1.639 & 1.265 & 1.682 & 1.637\\
+Sum of gamble choices (round 1) & 7.179 & 2.123 & 7.056 & 7.186\\
+Friends and family: One or both recognized friendship or kinship(\%) & 10.49\% &  & 100\% & 5.618\%\\
+Both recognized friendship(\%) & 2.427\% &  & 29.019\% & 0.98\%\\
+\addlinespace
+Both recognized kinship(\%) & 0.176\% &  & 2.015\% & 0.076\%\\
+One recognized friendship, other kinship(\%) & 0.453\% &  & 5.464\% & 0.18\%\\
+One recognized friendship(\%) & 6.9\% &  & 57.77\% & 4.132\%\\
+One recognized kinship(\%) & 0.534\% &  & 5.732\% & 0.251\%\\
+Stranger(\%) & 89.51\% &  & 0\% & 94.382\%\\
+\addlinespace
+Geographically proximate friends and family(\%) & 5.162\% &  & 100\% & 0\%\\
+One lives in the municipal centre, one not(\%) & 30.951\% &  & 0\% & 32.635\%\\
+Different genders(\%) & 20.537\% &  & 16.57\% & 20.753\%\\
+Difference in age(years) & 12.404 & 9.682 & 11.481 & 12.454\\
+Difference in education (years) & 3.235 & 2.77 & 2.633 & 3.267\\
+\addlinespace
+Difference in marital status(\%) & 34.684\% &  & 30.721\% & 34.9\%\\
+Difference in household consumption ('000s Pesos/month) & 232.84 & 227.244 & 226.585 & 233.181\\
+Difference in log household consumption per month & 0.589 & 0.489 & 0.583 & 0.59\\
+Difference in household size & 3.111 & 2.907 & 2.803 & 3.128\\
+Difference in round 1 winnings ('000 Pesos) & 4.182 & 3.213 & 4.079 & 4.188\\
+\addlinespace
+Number who live in the municipal centre & 0.715 & 0.78 & 1.161 & 0.691\\
+Number of females & 1.75 & 0.482 & 1.765 & 1.749\\
+Sum of ages (years) & 83.673 & 16.012 & 84.456 & 83.631\\
+Sum of education (years) & 7.352 & 4.512 & 6.71 & 7.387\\
+Number married & 1.55 & 0.592 & 1.595 & 1.548\\
+\addlinespace
+Sum of household consumption ('000s Pesos/month) & 850.188 & 359.942 & 850.359 & 850.179\\
+Sum of log household consumption per month & 25.621 & 0.845 & 25.601 & 25.622\\
+Sum of household sizes & 14.568 & 4.529 & 14.114 & 14.592\\
+Sum of round 1 winnings ('000s Pesos) & 11.708 & 5.484 & 11.524 & 11.718\\
+obs & 86518 &  & 4466 & 82052\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+\end{table}
+
+The same analysis is replicated below for the bad cause. We observe that
+without incentives, there is no significant difference
+(p\textgreater{}0.44 for both panels) between the effort produced in the
+public and private conditions. When given monetary incentives, we
+observe the same results as for the good cause. In the public condition,
+there is non-significant effect on effort (p\textgreater{}0.6 for both
+panels). In the private condition, we observe an increase in effort, but
+this difference in effectiveness across the two different visibilities
+is significant for panel A (p=0.07) but not for panel B (p=0.32).
+
+To analyze the two causes together, the following OLS regression tables
+(Table 1 and 2) analyze how the private/public conditions affect the
+number of pressed key pairs, which reflects the effort produced. The
+first table controls for the perceived identification of others, and the
+second controls for American Red Cross and NRA. The first column of both
+tables show that monetary incentives increase effort in the private
+conditions, which doesn't hold in the public condition as column 2
+shows. The two tables also show the importance of the cause, especially
+in the public conditions. The third columns, which combines the public
+and private conditions, reinforces the previous stated results about the
+effect of monetary incentives and the nature of the cause on the level
+of effort. Overall, the coefficients of our table and their statistical
+significance match the paper's results while our t-values differ
+slightly from those in the paper. Two coefficients had different
+significance levels in our results- one was significant at the 1\% level
+in our table while it was significant at the 5\% level in the paper's
+table, and the opposite was true for the other. We believe this change
+is due that the p-values are close to the cutoff between the two
+significance levels, so the difference might be due to the use of a
+difference statistical software.
+
+\section{4. Related literature}\label{related-literature}
+
+\section{5. Experiment proposal}\label{experiment-proposal}
+
+\section{Appendix}\label{appendix}
+
+\section{References}\label{references}
+
+\end{document}
+
+

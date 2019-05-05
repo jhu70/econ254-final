@@ -49,13 +49,14 @@ glimpse(tablea1)
 ```
 
 
-
-
 ```{r}
 library(miceadds)
 model_formula1 <- as.formula(pdefault ~  grpFFcl.y+grpmem+gch2+gfem+gage+gurb+gysch+gmar+glcons+ghhsz+factor(municode))
 tablea1_1<-tablea1%>%
   filter(grpmem<=3)
+
+# col1<-lm.cluster(model_formula1,data =tablea1_1,cluster = tablea1_1$municode)
+# summary(col1)
 
 col1<-lm(model_formula1,data =tablea1_1)
 summary(col1)
@@ -74,16 +75,23 @@ col3<-lm(data =tablea1,model_formula3)
 summary(col3)
 
 
-
-model_formula_var <- as.formula(pdefault ~  grpFFcl.y+grpmem+ffclmem+gch2+gfem+gage+gurb+gysch+gmar+glcons+ghhsz)
-
-col_var<-lm(model_formula_var,data =tablea1_1)
-summary(col_var)
 ```
+
+```{r}
+library(lfe)
+col1<- felm(pdefault ~  grpFFcl.y+grpmem+gch2+gfem+gage+gurb+gysch+gmar+glcons+ghhsz|0|0|municode, data= tablea1_1)
+```
+
+
+
+
+se=list(coef(summary(col1,cluster = c("municode")))[, 2])
+
+
 
 ```{r, result = 'asis'}
 library(stargazer)
-stargazer(col1,col2,col3,type = "html", column.labels = c("Groups of 2 or 3","All groups"), column.separate = c(1,2),title="Table A1: Group-level analysis of defections: Dependent variable = proportion of members that default",align=TRUE,covariate.labels=c("[1] Density of close friends and amily network within group","[2] Number of group members","[1] x [2]","Average gamble choice","Proportion of females","Average age","Proportion living in municipal centre","Average years of education","Proportion married","Average log household consumption","Average household size","Constant"),omit.stat=c("LL","ser","f"),ci=FALSE, ci.level=0.90,no.space=TRUE,keep = c("grpFFcl.y","grpmem","ffclmem","gch2","gfem","gage","gurb","gysch","gmar","glcons","ghhsz","(Intercept)"),colnames = FALSE,object.names = FALSE, out = "tablea1.htm",notes = " Linear regression coefficients reported. Standard errors (in parentheses) adjusted to account of non-independence within municipalities by clustering",notes.align = "l",notes.append = TRUE, add.lines =list(c("Municipality dummies","no","no","yes")),rownames = FALSE,intercept.bottom = TRUE, keep.stat = c("n"),dep.var.labels = "Proportion of members that default", star.char = NULL,column.sep.width = "0.3pt", font.size = "scriptsize")
+stargazer(col1,col2,col3,type = "html", column.labels = c("Groups of 2 or 3","All groups"), column.separate = c(1,2),title="Table A1: Group-level analysis of defections: Dependent variable = proportion of members that default",align=TRUE,covariate.labels=c("[1] Density of close friends and family network within group","[2] Number of group members","[1] x [2]","Average gamble choice","Proportion of females","Average age","Proportion living in municipal centre","Average years of education","Proportion married","Average log household consumption","Average household size","Constant"),omit.stat=c("LL","ser","f"),ci=FALSE, ci.level=0.90,no.space=TRUE,keep = c("grpFFcl.y","grpmem","ffclmem","gch2","gfem","gage","gurb","gysch","gmar","glcons","ghhsz","(Intercept)"),colnames = FALSE,object.names = FALSE, out = "tablea1.htm",notes = " Linear regression coefficients reported. Standard errors (in parentheses) adjusted to account of non-independence within municipalities by clustering",notes.align = "l",notes.append = TRUE, add.lines =list(c("Municipality dummies","no","no","yes")),rownames = FALSE,intercept.bottom = TRUE, keep.stat = c("n"),dep.var.labels = "Proportion of members that default", star.char = NULL,column.sep.width = "0.3pt", font.size = "scriptsize")
 ```
 
 out

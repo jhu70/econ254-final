@@ -19,7 +19,7 @@ library(tidyr)
 
 ```{r}
 library(haven)
-Dyadic_1<- read.csv("Dyadic.csv") 
+Dyadic<- read.csv("Dyadic.csv") 
 
 tab1<-Dyadic%>%
   filter(inreg == 1 & frfamcl == 1)

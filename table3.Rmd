@@ -156,9 +156,10 @@ c2b<-data.frame(choice = "choice2", c2b)%>%
 ```
 
 ```{r}
-c3b<-merge(c2, c2b, all = TRUE)%>%  
-  group_by(gamble,choice)%>%
-  summarise(meanprop = mean(prop))%>%
+c3b<-merge(c2, c2b, all = TRUE)
+c3b<-c3b%>%
+  dplyr::group_by(gamble,choice)%>%
+  dplyr::summarise(meanprop = mean(prop))%>%
   spread(choice,meanprop)
 
 c3b<-data.frame(round = "2", c3b)
@@ -169,7 +170,7 @@ c3b<-data.frame(round = "2", c3b)
 ```{r}
 c3<-merge(c1, c1b, all = TRUE)%>%  
   group_by(gamble,choice)%>%
-  summarise(meanprop = mean(prop))%>%
+  dplyr::summarise(meanprop = mean(prop))%>%
   spread(choice,meanprop)
 
 c3<-data.frame(round = "1", c3)
@@ -196,7 +197,7 @@ vectorsum1<-vector%>%
 
 vectorsum1<-na.omit(vectorsum1)%>%
   group_by(Vars)%>%
-  summarise_each(funs(mean_fullsample = mean(Value), sd_fullsample = sd(Value)))%>%
+  dplyr::summarise_each(funs(mean_fullsample = mean(Value), sd_fullsample = sd(Value)))%>%
   mutate(round = c(1,2,1,1,2,2,1,2))
 
 
@@ -213,7 +214,7 @@ vectorsum2<-vectorsum2%>%
 
 vectorsum2<-na.omit(vectorsum2)%>%
   group_by(Vars)%>%
-  summarise_each(funs(mean_sampleanalysed = mean(Value), sd_sampleanalysed = sd(Value)))%>%
+  dplyr::summarise_each(funs(mean_sampleanalysed = mean(Value), sd_sampleanalysed = sd(Value)))%>%
   mutate(round = c(1,2,1,1,2,2,1,2))
 
 

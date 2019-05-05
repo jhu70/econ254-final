@@ -15,6 +15,18 @@ library(scales)
 library(readr)
 library(rms)
 library(dplyr)
+library(haven)
+library(tidyverse)
+library(yardstick)
+library(ggplot2)
+library(mosaic)
+library(stargazer)
+require(Stat2Data)
+library(scales)
+library(readr)
+library(rms)
+library(pastecs)
+library(tidyr)
 ```
 
 ```{r}
@@ -113,17 +125,19 @@ c3_m<-margins(c3,data = find_data(c3, parent.frame()),variables = c("difchoice1"
 
 
 ```{r}
+library(miceadds)
 Dyadic_c2<-Dyadic_mdum
 c2_formula <- paste("samegroup ~ difchoice1 + friend2+ friendfamily +family2 +friend1 +family1 + frfamcl + dcfrfamcl + difurban +diffemale+ difyage +difysch +difmarried +difcons+ difhhsize +difwin1+ sumchoice1 +sumurban+ sumfemale +sumyage+ sumysch +nummarried +sumcons+ sumhhsize +sumwin1+",mdumf)
-c2 <- glm(c2_formula,family = binomial(link="logit"), data = Dyadic_c2)
-c2
+c2 <- glm(c2_formula,family = binomial(link="logit"), data = Dyadic_c2, na.action = na.omit)
+summary(c2)
 ```
 
 ```{r}
-c2_m<-margins(c2,data = find_data(c2, parent.frame()),variables = c("difchoice1","frfamcl","dcfrfamcl","friend2","friendfamily","family2","friend1","family1"),type = c("response","link"),vcov = stats::vcov(c2), vce = c("delta", "simulation", "bootstrap",  "none"), iterations = 50L, unit_ses = FALSE, eps = 1e-07)
-
+c2_m<-margins(c2, data = Dyadic_mdum,variables = c("difchoice1","frfamcl","dcfrfamcl","friend2","friendfamily","family2","friend1","family1"),type = c("response","link"),vcov = stats::vcov(c2), vce = c("delta"), iterations = 50L, unit_ses = FALSE, eps = 1e-07)
 ```
-
+```{R}
+summary(c2_m)
+```
 ```{r}
 Dyadic_c4<-Dyadic_mdum%>%
   filter(frfamcl==0)
@@ -196,27 +210,34 @@ table5<-merge(x=table5,y=c3m, by = "factor", all.x = TRUE)
 table5<-merge(x=table5,y=c4m, by = "factor", all.x = TRUE)
 
 
-table5<-merge(x=table5,y=c5m, by = "factor", all.x = TRUE)
+table5<-merge(x=table5,y=c5m, by = "factor", all = TRUE)
 ```
 
 
 ```{r}
-table5<-table5[with(table5,order(table5[["1"]],table5[["5"]])), ]%>%
-  mutate(factor = c("Diff. in gamble choice 1 x Close friends and family","Difference in gamble choice (round 1)","Close friends and family","One recognised kinship","Both recognised kinship","One recognised friendship, other kinship","One recognised friendship","Both recognised friendship"))
+table5<-table5%>%
+  mutate(factor = c("Diff. in gamble choice 1 x Close friends and family","Diff. in gamble choice x Max no. close friends and family options","Difference in gamble choice (round 1)","One recognised kinship","Both recognised kinship","Close friends and family","One recognised friendship","Both recognised friendship","One recognised friendship, other kinship","Max.no of close friends and family options"))
 
 ```
 
 ```{r}
-is.num <- sapply(table5, is.numeric)
-table5[is.num] <- lapply(table5[is.num], round, 3)
+table5<-table5%>%
+  mutate(round=1:10)
+or <- c("3", "6","1","8","5","4","7","9","10","2")
+
+table5<-table5%>%
+  slice(match(or, round))
+
+table5$round = NULL
+
 ```
+
+
 
 ```{r}
-table5<- sapply(table5, as.character)
-table5[is.na(table5)] <- " "
-
+ is.num <- sapply(table5, is.numeric)
+ table5[is.num] <- lapply(table5[is.num], round, 3)
 ```
-
 ```{r, eval = FALSE}
 sd<-read.csv("table5_sd.csv")
 colnames(sd)[colnames(sd)=="X1"] <- "1"
@@ -231,24 +252,40 @@ colnames(sd)[colnames(sd)=="X5"] <- "5"
 ```{r}
 library(plyr)
 table5_2<-rbind(table5,sd)
-table5_2<-table5_2[order(table5_2$factor, table5_2[["1"]]),]
+table5_2<-arrange(table5_2, factor)
 table5_2[duplicated(table5_2$factor),1]<- " "
 rownames(table5_2) <- NULL
 ```
+```{r}
+table5_2<-table5_2%>%
+  mutate(round=1:20)
+
+
+```
+
 
 ```{r}
-is.num <- sapply(c5m, is.numeric)
-c5m[is.num] <- lapply(c5m[is.num], round, 3)
-table5_2[17,5]<-c5m[1,1]
-table5_2[17,1]<-"Max no. of close friends and family options"
-table5_2[18,5]<-"(0.003)"
-table5_2[19,5]<-c5m[8,1]
-table5_2[20,5]<-"4.2e-04"
-table5_2[19,1]<-"Diff. in gamble choice x Max no. close friends and family options "
+or <- c("11", "12","5","6","7","8","1","2","3","4","17","18","15","16","19","20","13","14","9","10")
+
+table5_2<-table5_2%>%
+  slice(match(or, round))
+
+table5_2$round = NULL
+```
+
+```{r}
+table5_3<-read.csv("table5_3.csv")
+colnames(table5_3)<-c("factor","1","2","3","4","5")
+
+table5_2<-rbind(table5_2,table5_3)
+```
+
+
+```{r}
+table5_2[19,6]<-round(c5m[8,1],3)
 table5_2<- sapply(table5_2, as.character)
 table5_2[is.na(table5_2)] <- " "
 ```
-
 
 
 ```{r, result = 'asis'}
@@ -256,8 +293,8 @@ table5_2[is.na(table5_2)] <- " "
 library(kableExtra)
 library(params)
 library(knitr)
-table5_print<-knitr::kable(table5_2,format = "html", row.names = NA,align = 'c',escape = F,booktabs = T, col.names = c("","1","2","3","4","5"))%>%add_header_above(c(" " = 1, "All dyads" = 2,"Close friends and family" = 1, "Other dyads" = 2))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size = 16)%>%add_header_above(c("Table 5: Dyadic analysis of assortative matching on risk attitudes"=6))%>% add_footnote("Notes: Marginal effects reported. Corresponding standard errors (in parentheses) adjusted to account for non-independence within municipalities by clustering; *** - sig. at 1% level; ** - sig. at 5% level; * - sig. at 10% level. # - 4 additional municipalities were dropped from this regression because, in one, all of the dyads joined the same group and, in three, none of the dyads joined the same group; ## - Controls included: One lives in municipal centre, one not, Different genders, Difference in age, Difference in years of schooling, Difference in marital status, Difference in log household consumption, Difference in household size, Difference in round 1 winnings, Sum of gamble choices,
-Number who live in municipal centre, Number of females, Sum of ages, Sum of years of schooling, Number who are married (not to each other), Sum log household consumption, Sum of household sizes, Sum of round 1 winnings.", notation="alphabet")
+table5_print<-knitr::kable(table5_2,format = "html", row.names = NA,align = 'c',escape = F,booktabs = T, col.names = c("","1","2","3","4","5"))%>%add_header_above(c(" " = 1, "All dyads" = 2,"Close friends and family" = 1, "Other dyads" = 2))%>%  kable_styling(bootstrap_options = c("striped"), full_width = F, font_size =14)%>%add_header_above(c("Table 5: Dyadic analysis of assortative matching on risk attitudes"=6))%>% add_footnote("Notes: Marginal effects reported. Corresponding standard errors (in parentheses) adjusted to account for non-independence within municipalities by clustering; *** - sig. at 1% level; ** - sig. at 5% level; * - sig. at 10% level. # - 4 additional municipalities were dropped from this regression because, in one, all of the dyads joined the same group and, in three, none of the dyads joined the same group; ## - Controls included: One lives in municipal centre, one not, Different genders, Difference in age, Difference in years of schooling, Difference in marital status, Difference in log household consumption, Difference in household size, Difference in round 1 winnings, Sum of gamble choices,Number who live in municipal centre, Number of females, Sum of ages, Sum of years of schooling, Number who are married (not to each other), Sum log household consumption, Sum of household sizes, Sum of round 1 winnings.", notation="alphabet")
+table5_print<-column_spec(table5_print, 1:6, width = "0.2em",width_max = "20em")
 
 print(table5_print)
 
